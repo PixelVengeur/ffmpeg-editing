@@ -60,18 +60,66 @@
 #Fade the end (audio)
 # ffplay -i .\bob2.mkv -af "afade=t=out:st=3:d=1"
 
+ 
+## Fade transition
+# $plan1 = ".\bob3.mkv"
+# $plan2 = ".\bob2.mkv"
+# $duration = 3 
+# $lClip1 = ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 .\bob3.mkv
+# $offset = $lClip1-$duration -1
 
-#TODO 
-# Fade transition
-ffmpeg -y -i .\bob1.mkv -i .\bob2.mkv -filter_complex "xfade=transition=fade:duration=2.5:offset=8.75" .\distance.mkv
+# Write-Output $lClip1, $offset
 
-# Blur image
+# ffmpeg -y -i $plan1 -i $plan2 -filter_complex "xfade=
+# transition=fade
+# :duration=$duration
+# :offset=$offset" .\distance.mkv
+
+
+
+## Blur image
 # ffplay -i .\bob1.mkv -vf "boxblur=10"
 
-# Overlay image
-# Animate image position
+$video = ".\bob1.mkv"
+$image = ".\img.jpg"
+
+## Scale image to fit
+
+# ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $video
+$dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $video
+$videoW, $videoH = $dimensions.Split("x")
+$dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $image
+$imageW, $imageH = $dimensions.Split("x")
+
+echo $videoW, $videoH, $imageW, $imageH
+
+$ratio = $videoW/$videoH
+
+if ($imageW -gt $imageH)
+{
+    $newH = [int]$videoH * 1.5
+    echo $newH
+    ffmpeg -y -i $image -vf scale=-1:${newH} out.jpg
+}
+else
+{
+    $newW = [int]$videoW/1.75
+    echo $newW
+    ffmpeg -y -i $image -vf scale=${newW}:-1 out.jpg
+}
 
 
+# ffmpeg -y -loglevel error -i .\img.jpg -vf scale=$$videoW}*3/4:-1 out.jpg
 
-# ffmpeg -y -ss 10 -i .\bob1.mkv -c copy -t 10 .\bob3.mkv
+## Overlay image
+
+ffmpeg -y -loglevel error -i $video -i .\out.jpg -filter_complex "[0:v][1:v] overlay=
+(main_w - overlay_w)/2
+:((main_h - overlay_h)/2 -200) + t*50
+:enable='between(t,1,8)'" out.mkv
+
+## Animate image position
+
+
+# ffmpeg -y -ss 00:00:10 -i .\bob2.mkv -c copy -t 10 .\bob3.mkv
 # ffmpeg -y -ss 20 -i .\bob1.mkv -c copy -t 10 .\bob4.mkv
