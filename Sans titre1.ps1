@@ -1,4 +1,37 @@
-﻿#foreach($file in Get-ChildItem .\* -Include @("*.mp4", "*.mkv"))
+﻿<#
+
+PLAN
+1) Lire les durées de toutes les musiques bout à bout
+2) Accélérer via le time lapse-inator à la durée de toutes les musiques -20 secondes
+3) Fade in/Fade out (1.5s)
+4) Construire la fin de la vidéo : image en fond, floutée, opacité 60%, qui prend toute la largeur, overlay image nette
+5) Mouvement de l'image derrière : monter de 1/14e de sa hauteur
+6) Mouvement de l'image devant : descendre de 1/5 de sa hauteur 
+7) Le tout sur 20 secondes
+8) Fade in sur cette séquence en Fade out à la fin (1.5s/4s)
+9) Coller le time lapse et le résultat en ajoutant la musique
+10) Titres et textes:
+    10.1) Créer un fichier avec les time codes de début de chaque segment musical + 3s
+    10.2) Générer les textes de musique. Open Sans Bold. Musique en police 40 #FFF, compositeur en police 32 + RGB(192, 192, 192)
+    10.3) Template de titre : rectangle qui s'allonge sur 10 frames à gauche
+            Frame 11 : texte commence à apparaître, sur 7 frames
+            250 frames
+            16 frame de fade out texte
+            11 frames de réduction rectangle
+    10.4) Texte "Total work time": 5s total, fade in 1s, fade out 1s
+#> 
+
+
+
+
+
+
+
+
+
+
+
+#foreach($file in Get-ChildItem .\* -Include @("*.mp4", "*.mkv"))
 #{
     #echo $file
 #    echo "file '$file'" >> videos.txt
@@ -55,10 +88,10 @@
 
 
 #Fade the beginning and end (video)
-# ffplay -i .\bob2.mkv -vf "fade=t=in:st=0:d=1.5, fade=t=out:st=5:d=1.5"
+#ffplay -i .\bob2.mkv -vf "fade=t=in:st=0:d=1.5, fade=t=out:st=5:d=1.5"
 
 #Fade the end (audio)
-# ffplay -i .\bob2.mkv -af "afade=t=out:st=3:d=1"
+#ffplay -i .\bob2.mkv -af "afade=t=out:st=3:d=1"
 
  
 ## Fade transition
@@ -91,7 +124,7 @@ $videoW, $videoH = $dimensions.Split("x")
 $dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $image
 $imageW, $imageH = $dimensions.Split("x")
 
-echo $videoW, $videoH, $imageW, $imageH
+# echo $videoW, $videoH, $imageW, $imageH
 
 $ratio = $videoW/$videoH
 
@@ -99,26 +132,25 @@ if ($imageW -gt $imageH)
 {
     $newH = [int]$videoH * 1.5
     echo $newH
-    ffmpeg -y -i $image -vf scale=-1:${newH} out.jpg
+    ffmpeg -y -loglevel error -i $image -vf scale=-1:${newH} out.jpg
 }
 else
 {
     $newW = [int]$videoW/1.75
     echo $newW
-    ffmpeg -y -i $image -vf scale=${newW}:-1 out.jpg
+    ffmpeg -y -loglevel error -i $image -vf scale=${newW}:-1 out.jpg
 }
 
 
 # ffmpeg -y -loglevel error -i .\img.jpg -vf scale=$$videoW}*3/4:-1 out.jpg
 
-## Overlay image
+## Overlay image and animate
 
-ffmpeg -y -loglevel error -i $video -i .\out.jpg -filter_complex "[0:v][1:v] overlay=
+ffmpeg -y -loglevel error -i $video -i .\out.jpg -filter_complex "[0]boxblur=10[a];
+[a][1]overlay=
 (main_w - overlay_w)/2
-:((main_h - overlay_h)/2 -200) + t*50
-:enable='between(t,1,8)'" out.mkv
-
-## Animate image position
+:((main_h - overlay_h)/2 -100) + t*20
+:enable='between(t,2,7)'" .\out.mkv
 
 
 # ffmpeg -y -ss 00:00:10 -i .\bob2.mkv -c copy -t 10 .\bob3.mkv
