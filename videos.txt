@@ -1,2 +1,6 @@
-file C:/Users/Nathan/Desktop/vidTemp/bob1.mkv
-file C:/Users/Nathan/Desktop/vidTemp/bob2.mkv
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\Akebi-chan no Sailor-fuku - S01E07 - VOSTFR 1080p WEB x264 -NanDesuKa (WAKA).mkv'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\bob1.mkv'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\bob2.mkv'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\bob3.mkv'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\distance.mkv'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\out.mkv'

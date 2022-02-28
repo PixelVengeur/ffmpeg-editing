@@ -1,0 +1,2 @@
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\nier1.wav'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\nier2.wav'

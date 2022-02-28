@@ -1,9 +1,8 @@
 ﻿<#
-
 PLAN
 1) Lire les durées de toutes les musiques bout à bout
-2) Accélérer via le time lapse-inator à la durée de toutes les musiques -20 secondes
-3) Fade in/Fade out (1.5s)
+2) Accélérer via le time lapse-inator à la durée de toutes les musiques -20 secondes. Note: filtre "minterpolate" pour du frame insert
+3) Fade in/Fade out
 4) Construire la fin de la vidéo : image en fond, floutée, opacité 60%, qui prend toute la largeur, overlay image nette
 5) Mouvement de l'image derrière : monter de 1/14e de sa hauteur
 6) Mouvement de l'image devant : descendre de 1/5 de sa hauteur 
@@ -21,40 +20,118 @@ PLAN
     10.4) Texte "Total work time": 5s total, fade in 1s, fade out 1s
 #> 
 
+# VIDEO
 
 
+# region Lister toutes les vidéos
+# Clear-Content .\videos.txt
+# foreach ($file in Get-ChildItem .\videos\* -Include @("*.mp4", "*.mkv")) {
+#     # Write-Output "file '${file}'"
+#     "file '${file}'" | Out-File -Encoding utf8NoBOM -Append -FilePath .\videos.txt
+# }
+# endregion
 
 
+# region Lister tous les audios
+# Clear-Content .\audios.txt
+# foreach ($file in Get-ChildItem .\musiques\* -Include @("*.wav", "*.mp3")) {
+#     # Write-Output "file '${file}'"
+#     "file '${file}'" | Out-File -Encoding utf8NoBOM -Append -FilePath .\audios.txt
+# }
+# endregion
 
 
-
-
-
-
-#foreach($file in Get-ChildItem .\* -Include @("*.mp4", "*.mkv"))
-#{
-    #echo $file
-#    echo "file '$file'" >> videos.txt
-#}
-
-#ffmpeg -y -f concat -safe 0 -i videos.txt -vf 'setpts=0.05*PTS' -r 24 -s 800x600 -c:v libx265 -c:a copy -x265-params crf=17 out.mkv
-
-
-# Get length of all audio files combined
+# region Longueur des fichiers audio
 # $audioLength = 0
 # $audioTotal = 0
-# foreach($file in Get-ChildItem .\* -Include @("*.wav"))
-# {
+# $content = Get-Content -Path .\audios.txt
+# foreach ($line in $content) {
+#     $audio = $line.Trim("file").Trim().Trim("'")
+#     echo $audio
 #     $audioTotal++
-#     $audioLength += ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $file
+#     $audioLength += ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $audio
 # }
 # $audioLength = [math]::ceiling($audioLength)
 
-# Write-Output $audioTotal
+# Write-Output "Longueur audio : $audioLength secondes"
+# endregion
 
 
+# region Accélérer la vidéo à la durée des audios -20s
+## Accélérer la vidéo + fade
+$videoLength = 0
+$content = Get-Content -Path .\videos.txt
+foreach ($line in $content) {
+    $video = $line.Trim("file").Trim().Trim("'")
+    $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
+    $videoLength += $duration
+}
+$videoLength = [math]::ceiling($videoLength)
+Write-Output "Longueur vidéo : $videoLength secondes"
+
+##### TIMELAPSE
+
+### Accélérer la vidéo + fade
+$spedUpLength = $audioLength - 18
+$fadeOutStart= $audioLength - 20
+# ffmpeg -y -i ".\videos\Akebi-chan no Sailor-fuku - S01E07 - VOSTFR 1080p WEB x264 -NanDesuKa (WAKA).mkv" -vf "setpts=($spedUpLength/$videoLength)*PTS, fade=t=in:st=0:d=3, fade=t=out:st=${fadeOutStart}:d=2" -an -sn -max_interleave_delta 0 out.mkv
+
+#### REMUX x265 
+# ffmpeg -y -i ".\videos\Akebi-chan no Sailor-fuku - S01E07 - VOSTFR 1080p WEB x264 -NanDesuKa (WAKA).mkv" -vf "setpts=(${audioLength}/${videoLength})*PTS" -c:v libx265 -an -sn -x265-params crf=25 out.mp4
+
+## Fade-in - fade-out
+# ffplay -i .\out.mkv -vf "fade=t=in:st=0:d=3, fade=t=out:st=5:d=3"
+# endregion
+
+ 
+# region Écran de fin de vidéo
+$video = ".\out.mkv"
+$image = ".\img2.jpg"
+
+### Scale image to fit
+$dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $video
+$videoW, $videoH = $dimensions.Split("x")
+$dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $image
+$imageW, $imageH = $dimensions.Split("x")
+
+Write-Output "Vidéo: $videoW x $videoH, Image: $imageW x $imageH"
+
+$ratio = $videoW / $videoH
+
+if ($imageW -gt $imageH) {
+    $newH = [int]$videoH * 1.5
+    $newH = [math]::ceiling($newH)
+    Write-Output "newH = $newH"
+    ffmpeg -y -loglevel error -i $image -vf scale=-1:${newH},setsar=1/1 .\temp\top.jpg
+}
+else {
+    $newW = [int]$videoW / 1.75
+    $newW = [math]::ceiling($newW)
+    Write-Output "newW = $newW"
+    ffmpeg -y -loglevel error -i $image -vf scale=${newW}:-1,setsar=1/1 .\temp\top.jpg
+}
+
+ffmpeg -y -loglevel error -i $image -vf scale=${videoW}:-1,boxblur=10,lut=a=val*0.3 .\temp\bottom.jpg
+
+####Squaring out images
+ffmpeg -y -loglevel error -i .\temp\top.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\top.jpg
+ffmpeg -y -loglevel error -i .\temp\bottom.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\bottom.jpg
+
+### Overlay image and animate
+ffmpeg -y -loglevel error -i .\temp\bottom.jpg -i .\temp\top.jpg -filter_complex "[0]boxblur=10[a];
+[a][1]overlay=
+(main_w - overlay_w)/2
+:((main_h - overlay_h)/2 -100) + t*20
+:enable='between(t,2,7)'" -c:v libx265 -t 20 -x265-params crf=25 .\overlayed.mp4
+# endregion
+
+
+# ffmpeg -y -ss 00:00:10 -i .\bob2.mkv -c copy -t 10 .\bob3.mkv
+# ffmpeg -y -ss 20 -i .\bob1.mkv -c copy -t 10 .\bob4.mkv
+
+
+# region Texte Musique
 # $startTS = 1
-
 # ffplay -i bob1.mkv -vf "[in]
 # drawtext=
 # text='Music'
@@ -64,9 +141,9 @@ PLAN
 # :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
 # :x=50
 # :y=(h-text_h)/10*9[out]" -codec:a copy
+# endregion
 
-
-# Extract text blurbs
+# region Extract text blurbs
 # $textTemp = ""
 # $textArray = [object[]]::new($audioTotal)
 # $counter = 0
@@ -85,6 +162,7 @@ PLAN
 # }
 
 # Write-Output $textArray
+# endregion
 
 
 #Fade the beginning and end (video)
@@ -92,9 +170,9 @@ PLAN
 
 #Fade the end (audio)
 #ffplay -i .\bob2.mkv -af "afade=t=out:st=3:d=1"
-
  
-## Fade transition
+
+# region Fade transition
 # $plan1 = ".\bob3.mkv"
 # $plan2 = ".\bob2.mkv"
 # $duration = 3 
@@ -107,51 +185,4 @@ PLAN
 # transition=fade
 # :duration=$duration
 # :offset=$offset" .\distance.mkv
-
-
-
-## Blur image
-# ffplay -i .\bob1.mkv -vf "boxblur=10"
-
-$video = ".\bob1.mkv"
-$image = ".\img.jpg"
-
-## Scale image to fit
-
-# ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $video
-$dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $video
-$videoW, $videoH = $dimensions.Split("x")
-$dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $image
-$imageW, $imageH = $dimensions.Split("x")
-
-# echo $videoW, $videoH, $imageW, $imageH
-
-$ratio = $videoW/$videoH
-
-if ($imageW -gt $imageH)
-{
-    $newH = [int]$videoH * 1.5
-    echo $newH
-    ffmpeg -y -loglevel error -i $image -vf scale=-1:${newH} out.jpg
-}
-else
-{
-    $newW = [int]$videoW/1.75
-    echo $newW
-    ffmpeg -y -loglevel error -i $image -vf scale=${newW}:-1 out.jpg
-}
-
-
-# ffmpeg -y -loglevel error -i .\img.jpg -vf scale=$$videoW}*3/4:-1 out.jpg
-
-## Overlay image and animate
-
-ffmpeg -y -loglevel error -i $video -i .\out.jpg -filter_complex "[0]boxblur=10[a];
-[a][1]overlay=
-(main_w - overlay_w)/2
-:((main_h - overlay_h)/2 -100) + t*20
-:enable='between(t,2,7)'" .\out.mkv
-
-
-# ffmpeg -y -ss 00:00:10 -i .\bob2.mkv -c copy -t 10 .\bob3.mkv
-# ffmpeg -y -ss 20 -i .\bob1.mkv -c copy -t 10 .\bob4.mkv
+# endregion
