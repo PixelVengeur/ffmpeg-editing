@@ -21,7 +21,9 @@ PLAN
 #> 
 
 # VIDEO
-
+$video = ".\videos\Akebi-chan no Sailor-fuku - S01E07 - VOSTFR 1080p WEB x264 -NanDesuKa (WAKA).mkv"
+$image = ".\img4.jpg"
+$testing = 1
 
 # region Lister toutes les vidéos
 # Clear-Content .\videos.txt
@@ -33,27 +35,27 @@ PLAN
 
 
 # region Lister tous les audios
-# Clear-Content .\audios.txt
-# foreach ($file in Get-ChildItem .\musiques\* -Include @("*.wav", "*.mp3")) {
-#     # Write-Output "file '${file}'"
-#     "file '${file}'" | Out-File -Encoding utf8NoBOM -Append -FilePath .\audios.txt
-# }
+Clear-Content .\audios.txt
+foreach ($file in Get-ChildItem .\musiques\* -Include @("*.wav", "*.mp3")) {
+    # Write-Output "file '${file}'"
+    "file '${file}'" | Out-File -Encoding utf8NoBOM -Append -FilePath .\audios.txt
+}
 # endregion
 
 
 # region Longueur des fichiers audio
-# $audioLength = 0
-# $audioTotal = 0
-# $content = Get-Content -Path .\audios.txt
-# foreach ($line in $content) {
-#     $audio = $line.Trim("file").Trim().Trim("'")
-#     echo $audio
-#     $audioTotal++
-#     $audioLength += ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $audio
-# }
-# $audioLength = [math]::ceiling($audioLength)
+$audioLength = 0
+$audioTotal = 0
+$content = Get-Content -Path .\audios.txt
+foreach ($line in $content) {
+    $audio = $line.Trim("file").Trim().Trim("'")
+    echo $audio
+    $audioTotal++
+    $audioLength += ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $audio
+}
+$audioLength = [math]::ceiling($audioLength)
 
-# Write-Output "Longueur audio : $audioLength secondes"
+Write-Output "Longueur audio : $audioLength secondes"
 # endregion
 
 
@@ -62,72 +64,117 @@ PLAN
 $videoLength = 0
 $content = Get-Content -Path .\videos.txt
 foreach ($line in $content) {
-    $video = $line.Trim("file").Trim().Trim("'")
-    $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
+    $videoName = $line.Trim("file").Trim().Trim("'")
+    $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $videoName
     $videoLength += $duration
 }
 $videoLength = [math]::ceiling($videoLength)
 Write-Output "Longueur vidéo : $videoLength secondes"
 
-##### TIMELAPSE
+#### TIMELAPSE
+
+# $video = ".\videos\Akebi-chan no Sailor-fuku - S01E07 - VOSTFR 1080p WEB x264 -NanDesuKa (WAKA).mkv" ##### À REMPLACER PAR LE TIMELAPSE
+$frames = ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 $video
+$duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
+$framerate = [math]::ceiling($frames / $duration) 
 
 ### Accélérer la vidéo + fade
-$spedUpLength = $audioLength - 18
-$fadeOutStart= $audioLength - 20
-# ffmpeg -y -i ".\videos\Akebi-chan no Sailor-fuku - S01E07 - VOSTFR 1080p WEB x264 -NanDesuKa (WAKA).mkv" -vf "setpts=($spedUpLength/$videoLength)*PTS, fade=t=in:st=0:d=3, fade=t=out:st=${fadeOutStart}:d=2" -an -sn -max_interleave_delta 0 out.mkv
+$spedUpLength = ($audioLength - 20)
+$speedUpFactor = $spedUpLength / $videoLength
+$fadeOutStart = ($frames - 1.5 * [math]::ceiling($framerate / $speedUpFactor))
+Write-Output("fadeOutStart = $fadeOutStart, speedUpFactor = $speedUpFactor")
+
+# ffmpeg -y -loglevel error -i $video -vf "setpts=($speedUpFactor)*PTS,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -an -sn -max_interleave_delta 0 .\temp\speed.mkv
 
 #### REMUX x265 
-# ffmpeg -y -i ".\videos\Akebi-chan no Sailor-fuku - S01E07 - VOSTFR 1080p WEB x264 -NanDesuKa (WAKA).mkv" -vf "setpts=(${audioLength}/${videoLength})*PTS" -c:v libx265 -an -sn -x265-params crf=25 out.mp4
+# ffmpeg -y -i $video -vf "setpts=($speedUpFactor)*PTS,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -c:v libx265 -an -sn -x265-params crf=17 out.mp4
 
-## Fade-in - fade-out
-# ffplay -i .\out.mkv -vf "fade=t=in:st=0:d=3, fade=t=out:st=5:d=3"
 # endregion
 
  
 # region Écran de fin de vidéo
-$video = ".\out.mkv"
-$image = ".\img2.jpg"
 
 ### Scale image to fit
-$dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $video
+$dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 .\temp\speed.mkv
 $videoW, $videoH = $dimensions.Split("x")
 $dimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $image
 $imageW, $imageH = $dimensions.Split("x")
 
-Write-Output "Vidéo: $videoW x $videoH, Image: $imageW x $imageH"
-
-$ratio = $videoW / $videoH
+# Write-Output "Vidéo: $videoW x $videoH, Image: $imageW x $imageH"
 
 if ($imageW -gt $imageH) {
-    $newH = [int]$videoH * 1.5
-    $newH = [math]::ceiling($newH)
-    Write-Output "newH = $newH"
-    ffmpeg -y -loglevel error -i $image -vf scale=-1:${newH},setsar=1/1 .\temp\top.jpg
+    $ratio = $imageW / $imageH
+    ffmpeg -y -loglevel error -i $image -vf scale=-1:${videoH}*1.15 .\temp\top.jpg
 }
 else {
-    $newW = [int]$videoW / 1.75
-    $newW = [math]::ceiling($newW)
-    Write-Output "newW = $newW"
-    ffmpeg -y -loglevel error -i $image -vf scale=${newW}:-1,setsar=1/1 .\temp\top.jpg
+    $ratio = $imageH / $imageW
+    ffmpeg -y -loglevel error -i $image -vf scale=${videoW}*0.65:-1 .\temp\top.jpg
 }
 
-ffmpeg -y -loglevel error -i $image -vf scale=${videoW}:-1,boxblur=10,lut=a=val*0.3 .\temp\bottom.jpg
+
+Write-Output("Scaling end credits")
+if ($testing -eq 0)
+{
+    ffmpeg -y -loglevel error -i $image -vf scale=${videoW}*1.02:-1,boxblur=15,eq=brightness=-0.25 .\temp\bottom.jpg
+}
+# ffmpeg -y -loglevel error -i $image -vf scale=${videoW}*0.65:-1 .\temp\top.jpg
 
 ####Squaring out images
-ffmpeg -y -loglevel error -i .\temp\top.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\top.jpg
-ffmpeg -y -loglevel error -i .\temp\bottom.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\bottom.jpg
+Write-Output("Squaring out images")
+if ($testing -eq 0)
+{
+    ffmpeg -y -loglevel error -i .\temp\top.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\top.jpg
+    ffmpeg -y -loglevel error -i .\temp\bottom.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\bottom.jpg
+}
 
 ### Overlay image and animate
-ffmpeg -y -loglevel error -i .\temp\bottom.jpg -i .\temp\top.jpg -filter_complex "[0]boxblur=10[a];
-[a][1]overlay=
-(main_w - overlay_w)/2
-:((main_h - overlay_h)/2 -100) + t*20
-:enable='between(t,2,7)'" -c:v libx265 -t 20 -x265-params crf=25 .\overlayed.mp4
+Write-Output("Overlaying images")
+
+#### Bottom
+$bottomDimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 .\temp\bottom.jpg
+$bottomW, $bottomH = $bottomDimensions.Split("x")
+
+$hiddenHeight = ($videoH - $bottomH) * 0.1
+$pps = $hiddenHeight / 15
+
+Write-Output("Bottom")
+if ($testing -eq 0)
+{
+    ffmpeg -y -loglevel error -loop 1 -i .\temp\bottom.jpg -i .\temp\speed.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 - ${hiddenHeight}) + t*$pps" -t 20 .\temp\bottom.mkv
+}
+
+
+#### Top
+$topDimensions = ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 .\temp\top.jpg
+$topW, $topH = $topDimensions.Split("x")
+
+$hiddenHeight = ($videoH - $topH) * 0.5
+$hiddenHalf = $hiddenHeight / 2
+$pps = $hiddenHeight / 15
+
+Write-Output("Top")
+if ($testing -eq 0)
+{
+    ffmpeg -y -loglevel error -loop 1 -i .\temp\top.jpg -i .\temp\bottom.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 + $hiddenHalf) - t*$pps,
+    fade=t=in:st=0:d=1.5,
+    fade=t=out:st=17:d=3" -t 20 .\temp\overlayed.mkv
+}
+
+#endregion
+
+
+# region Ajouter l'écran de fin à la vidéo
+ffmpeg -y -loglevel error -f concat -safe 0 -i .\concat.ffmpeg -c copy .\temp\output.mkv 
 # endregion
 
 
-# ffmpeg -y -ss 00:00:10 -i .\bob2.mkv -c copy -t 10 .\bob3.mkv
-# ffmpeg -y -ss 20 -i .\bob1.mkv -c copy -t 10 .\bob4.mkv
+# region Ajouter la musique
+ffmpeg -y -loglevel error -f concat -safe 0 -i .\audios.txt -c copy .\temp\output.wav
+
+ffmpeg -i .\temp\output.mkv -i .\temp\output.wav -map 0:v -map 1:a -c:v copy -shortest output.mkv
+
+## TODO : problème de longueur du fichier vidéo, à fixer
+# endregion
 
 
 # region Texte Musique
