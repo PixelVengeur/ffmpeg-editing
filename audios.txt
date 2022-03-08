@@ -1,1 +1,1 @@
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\Felix Mendelssohn  - Trio pour piano et cordes n° 2 en ut mineur op. 66 - I. Allegro energico e co... [8IoW6668Wis].wav'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\Felix Mendelssohn  - Trio pour piano et cordes n° 2 en ut mineur op. 66 - I. Allegro energico e co... [8IoW6668Wis]2.wav'

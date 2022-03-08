@@ -21,8 +21,7 @@ PLAN
 #> 
 
 # VIDEO
-$image = "C:\Users\Nathan\OneDrive\Images\Epic-Handshake.jpg"
-$testing = 1
+$image = "C:\Users\Nathan\OneDrive\Images\Teasing Master VG.png"
 
 # region Lister toutes les vidéos
 Clear-Content .\videos.txt
@@ -77,13 +76,12 @@ $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -
 ### Accélérer la vidéo + fade
 $speedUpFactor = $audioLength / $videoLength
 $tempVal = $videoLength - (20/$speedUpFactor)
-Write-Output("fadeOutStart = $fadeOutStart,
-videoLength = $videoLength,
-speedUpFactor = $speedUpFactor")
+# Write-Output("videoLength = $videoLength,
+# speedUpFactor = $speedUpFactor")
 
 #### Cut the number of frames to length desired
 Write-Output "Cutting to length"
-# ffmpeg -y -i $video -t $tempVal -c:v copy .\temp\trimmed.mkv
+# ffmpeg -y -loglevel error -i $video -t $tempVal -c:v copy .\temp\trimmed.mkv
 
 #### Compute the fade out 
 $frames = ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 .\temp\trimmed.mkv
@@ -91,14 +89,14 @@ $framerate = [math]::ceiling($frames / $duration)
 $fadeOutStart = ($frames - 1.5 * ($framerate / $speedUpFactor))
 
 Write-Output "Speeding up and adding fades"
-ffmpeg -y -loglevel error -i .\temp\trimmed.mkv -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
+# ffmpeg -y -loglevel error -i .\temp\trimmed.mkv -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
 
 #### REMUX x265 
 # ffmpeg -y -i $video -vf "setpts=($speedUpFactor)*PTS,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -c:v libx265 -an -sn -x265-params crf=17 out.mp4
 
 # endregion
-
  
+
 # region Écran de fin de vidéo
 
 ### Scale image to fit
@@ -120,18 +118,12 @@ else {
 
 
 Write-Output("Scaling end credits")
-if ($testing -eq 1)
-{
-    ffmpeg -y -loglevel error -i $image -vf scale=${videoW}*1.02:-1,boxblur=15,eq=brightness=-0.25 .\temp\bottom.jpg
-}
+ffmpeg -y -loglevel error -i $image -vf scale=${videoW}*1.02:-1,boxblur=15,eq=brightness=-0.25 .\temp\bottom.jpg
 
 ####Squaring out images
 Write-Output("Squaring out images")
-if ($testing -eq 1)
-{
-    ffmpeg -y -loglevel error -i .\temp\top.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\top.jpg
-    ffmpeg -y -loglevel error -i .\temp\bottom.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\bottom.jpg
-}
+ffmpeg -y -loglevel error -i .\temp\top.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\top.jpg
+ffmpeg -y -loglevel error -i .\temp\bottom.jpg -vf scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1 .\temp\bottom.jpg
 
 ### Overlay image and animate
 Write-Output("Overlaying images")
@@ -143,7 +135,7 @@ $bottomW, $bottomH = $bottomDimensions.Split("x")
 $hiddenHeight = ($videoH - $bottomH) * 0.1
 $pps = $hiddenHeight / 15
 
-Write-Output("Bottom")
+Write-Output("`tBottom")
 ffmpeg -y -loglevel error -loop 1 -i .\temp\bottom.jpg -i .\temp\speed.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 - ${hiddenHeight}) + t*$pps" -r 60 -t 20 .\temp\bottom.mkv
 
 
@@ -155,7 +147,7 @@ $hiddenHeight = ($videoH - $topH) * 0.5
 $hiddenHalf = $hiddenHeight / 2
 $pps = $hiddenHeight / 15
 
-Write-Output("Top")
+Write-Output("`tTop")
 ffmpeg -y -loglevel error -loop 1 -i .\temp\top.jpg -i .\temp\bottom.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 + $hiddenHalf) - t*$pps,
 fade=t=in:st=0:d=1.5,
 fade=t=out:st=17:d=3" -r 60 -t 20 .\temp\overlayed.mkv
