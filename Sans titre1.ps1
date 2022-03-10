@@ -42,7 +42,6 @@ if ($ourbals -eq 1)
     $content = Get-Content -Path .\audios.txt
     foreach ($line in $content) {
         $audio = $line.Trim("file").Trim().Trim("'")
-        echo $audio
         $audioTotal++
         $audioLength += ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $audio
     }
@@ -195,7 +194,7 @@ if ($ourbals -eq 1)
     $subtitleFilter = $subtitleFilter.TrimEnd(", ")
     # echo $subtitleFilter
     Write-Host "Burning in subtitles and watermark`nH.265 remux" -ForegroundColor Magenta
-    # ffmpeg -y -loglevel error -stats -i .\temp\nosub.mkv -i .\img.png -filter_complex "[1:v]scale=-1:170 [ovrl],[0:v][ovrl]overlay=10:10,${subtitleFilter}, format=yuv420p" -codec:v libx265 -crf 17 -preset medium -codec:a copy .\output.mkv
+    ffmpeg -y -loglevel error -stats -i .\temp\nosub.mkv -i .\img.png -filter_complex "[1:v]scale=-1:170 [ovrl],[0:v][ovrl]overlay=10:10,${subtitleFilter}, format=yuv420p" -codec:v libx265 -crf 17 -preset medium -codec:a copy .\output.mkv
     ## TODO Watermark
 
     # endregion
