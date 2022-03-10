@@ -1,1 +1,3 @@
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\Felix Mendelssohn  - Trio pour piano et cordes n° 2 en ut mineur op. 66 - I. Allegro energico e co... [8IoW6668Wis]2.wav'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\Jeff Bezos vs Mansa Musa. Epic Rap Battles Of History [fCeUvPL9rMc].wav'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\John Wick vs John Rambo vs John McClane. Epic Rap Battles Of History [LN5lzg3TE60].wav'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\Ragnar Lodbrok vs Richard The Lionheart. Epic Rap Battles of History. [kgJMaP4msTs].wav'
