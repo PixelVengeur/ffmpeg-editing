@@ -1,7 +1,29 @@
-﻿$sourceDir = Read-Host "Path to the folder containing the footage to speed up (type . for the current folder)"
-$temp = Read-Host "Path to save temporary files to"
-$pts = Read-Host "Speed multiplier"
-$fps = Read-Host "Target FPS"
+﻿
+param([string]$sourceDir = "",
+[string]$temp = "",
+[Int32]$pts = -1,
+[Int32]$fps = -1)
+
+if ($sourceDir -eq "")
+{
+    $sourceDir = Read-Host "Path to the folder containing the footage to speed up (type . for the current folder)"
+}
+
+if ($temp -eq "")
+{
+    $temp = Read-Host "Path to the temporary folder"
+}
+
+if ($pts -eq -1)
+{
+    $pts = Read-Host "Speed multiplier"
+}
+
+if ($fps -eq -1)
+{
+    $fps = Read-Host "Target FPS"
+}
+
 
 if ($sourceDir -eq $temp) {
     $temp = "$sourceDir/temp"
@@ -22,12 +44,12 @@ if (-not(Test-Path -Path $temp -PathType Container)) {
 # Accélérer chaque vidéo une à une
 ForEach ($file in Get-ChildItem -Path $sourceDir) {
     if ($file -match "([0-9].mkv)$") {
-        echo "Speeding up $file"
-        ffmpeg -y -i $sourceDir\$file -hide_banner -loglevel error -max_interleave_delta 0 -filter:v "setpts=PTS/$pts" -an -r $fps -b:v 8000k $temp\Fast$file
+        Write-Host "Speeding up $file" -ForegroundColor Yellow
+        ffmpeg -y -i $sourceDir\$file -hide_banner -loglevel error -stats -max_interleave_delta 0 -filter:v "setpts=PTS/$pts" -an -r $fps $temp\Fast$file
     }
 }
 
-echo "All footage has been sped up"
+Write-Host "All footage has been sped up" -ForegroundColor Yellow
 
 # Supprimer les frames en double dans chaque fichier accéléré
 #ForEach ($file in Get-ChildItem $temp){
@@ -37,7 +59,7 @@ echo "All footage has been sped up"
 #    }
 #}
 
-echo "Concatenating sped-up footage"
+Write-Host "Concatenating sped-up footage" -ForegroundColor Yellow
 
 # Vérifier si list.txt existe
 if (-not(Test-Path -Path $temp\list.txt -PathType Leaf)) {
@@ -48,22 +70,20 @@ else {
 }
 
 # Ajouter les fichiers accélérés à list.txt
-echo "Listing files"
-ForEach ($file in Get-ChildItem $temp){
-    if ($file -match "(.mkv)$") {
-        $filePath ="file $temp\$file"
-        $filePath = $filePath -replace '[\\/]', '/'
-        Add-Content -Path $temp\list.txt -Value $filePath
-    }
+Write-Host "Listing files" -ForegroundColor Yellow
+ForEach ($file in Get-ChildItem $temp\* -Include @("*.mkv")) {
+    $filePath ="file '$file'"
+    # $filePath = $filePath -replace '[\\/]', '/'
+    Add-Content -Path $temp\list.txt -Value $filePath
 }
 
 # Concaténer les fichiers accélérés
-echo "Creating the timelapse"
-ffmpeg -loglevel error -f concat -safe 0 -i $temp\list.txt -c copy $temp\output.mkv
+Write-Host "Creating the timelapse" -ForegroundColor Yellow
+ffmpeg -loglevel error -stats -f concat -safe 0 -i ${temp}\list.txt -c copy $temp\output.mkv
 
-#Nettoyer le ficheir concaténé
-echo "Cleaning up the timelapse"
-ffmpeg -i $temp\output.mkv -loglevel error -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 $sourceDir\Timelapse.mkv
+#Nettoyer le fichier concaténé
+Write-Host "Cleaning up the timelapse" -ForegroundColor Yellow
+ffmpeg -i $temp\output.mkv -loglevel error -stats -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 $sourceDir\Timelapse.mkv
 
 ## CLEANUP
 # Supprimer le dossier temp récursivement

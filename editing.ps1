@@ -14,13 +14,14 @@ $ourbals = 1
 if ($ourbals -eq 1)
 {
     # VIDEO
-    $image = "C:\Users\Nathan\OneDrive\Images\Teasing Master VG.png"
+    $image = "C:\Users\pixel\OneDrive\Images\Teasing Master VG.png"
 
     # region Lister toutes les vidéos
     Clear-Content .\videos.txt
-    foreach ($file in Get-ChildItem .\videos\* -Include @("*.mp4", "*.mkv")) {
+    foreach ($file in Get-ChildItem .\videos\* -Include @("*.mkv")) {
         # Write-Host "file '${file}'"
-        "file '${file}'" | Out-File -Encoding utf8NoBOM -Append -FilePath .\videos.txt
+        $filePath ="file '$file'"
+        Add-Content -Path .\videos.txt -Value $filePath
     }
     # endregion
 
@@ -29,7 +30,8 @@ if ($ourbals -eq 1)
     Clear-Content .\audios.txt
     foreach ($file in Get-ChildItem .\musiques\* -Include @("*.wav")) {
         # Write-Host "file '${file}'"
-        "file '${file}'" | Out-File -Encoding utf8NoBOM -Append -FilePath .\audios.txt
+        $filePath ="file '$file'"
+        Add-Content -Path .\audios.txt -Value $filePath
     }
     # endregion
 
@@ -73,20 +75,24 @@ if ($ourbals -eq 1)
     # ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\videos.txt -c:v copy -an .\temp\concat.mp4
     # exit
     # Déduplication
-    $concatFramerate = ffprobe -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate .\temp\concat.mp4
-    $frate = [math]::Round((Invoke-Expression "$concatFramerate"))
-    Write-Host $frate
-    ffmpeg -y -loglevel error -stats -i .\temp\concat.mp4 -vf "mpdecimate,setpts=${1/(60/$frate)}" -r 60 .\temp\concatSlim.mkv
-    exit
-    
-    $video = ".\temp\concatSlim.mkv" ##### À REMPLACER PAR LE TIMELAPSE
+    # $concatFramerate = ffprobe -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate .\temp\concat.mp4
+    # $frate = [math]::Round((Invoke-Expression "$concatFramerate"))
+    # Write-Host $frate
+    # ffmpeg -y -loglevel error -stats -i .\temp\concat.mp4 -vf "mpdecimate,setpts=${1/(60/$frate)}" -r 60 .\temp\concatSlim.mkv
+    # exit
+    # $video = ".\temp\concatSlim.mkv" ##### À REMPLACER PAR LE TIMELAPSE
+
+    $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
+    # & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60
+
+    $video = ".\videos\Timelapse.mkv"
     $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
     $speedUpFactor = $audioLength / $videoLength
     $tempVal = $videoLength - (20/$speedUpFactor)
 
     #### Cut the number of frames to length desired
     Write-Host "Cutting to length" -ForegroundColor Magenta
-    # ffmpeg -y -loglevel error -stats -i $video -t $tempVal -c:v copy .\temp\trimmed.mkv
+    ffmpeg -y -loglevel error -stats -i $video -t $tempVal -c:v copy .\temp\trimmed.mkv
     # exit
 
     #### Compute the fade out 
@@ -96,7 +102,7 @@ if ($ourbals -eq 1)
 
     Write-Host "Speeding up and adding fades" -ForegroundColor Magenta
     ffmpeg -y -loglevel error -stats -i .\temp\trimmed.mkv -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
-    exit
+    
     # endregion
     
 
@@ -234,9 +240,9 @@ if ($ourbals -eq 1)
     }
 
     $subtitleFilter = $subtitleFilter.TrimEnd(", ")
-    echo $subtitleFilter
+    # echo $subtitleFilter
     Write-Host "Burning in subtitles and watermark`nH.265 remux" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -i .\temp\nosub.mkv -i .\wm.png -filter_complex "[1:v]scale=-1:170 [ovrl],[0:v][ovrl]overlay=10:10" -codec:v libx265 -crf 18 -preset medium -codec:a copy .\out\output.mp4
+    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -i .\wm.png -filter_complex "[1:v]scale=-1:170 [ovrl],[0:v][ovrl]overlay=10:10" -codec:v libx265 -crf 18 -preset medium -codec:a copy .\out\output.mp4
     # endregion
 }
 

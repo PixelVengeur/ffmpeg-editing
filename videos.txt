@@ -1,2 +1,4 @@
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\[Tsundere-Raws] Ousama Ranking - 18 VOSTFR (VRV) [1080p].mkv'
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\[Tsundere-Raws] Ousama Ranking - 21 VOSTFR (CR) [WEB 1080p x264 AAC].mkv'
+file 'C:\Users\pixel\Documents\GitHub\ffmpeg-editing\videos\2022-03-15_21-59-05.mkv'
+file 'C:\Users\pixel\Documents\GitHub\ffmpeg-editing\videos\2022-03-15_22-19-30.mkv'
+file 'C:\Users\pixel\Documents\GitHub\ffmpeg-editing\videos\2022-03-15_22-26-02.mkv'
+file 'C:\Users\pixel\Documents\GitHub\ffmpeg-editing\videos\Timelapse.mkv'
