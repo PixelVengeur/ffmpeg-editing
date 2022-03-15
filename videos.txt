@@ -1,3 +1,2 @@
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\[DJB] Shuumatsu no Harem (non-censuré) - 07 VOSTFR [1080p].mp4'
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\[DJB] Shuumatsu no Harem (non-censuré) - 08 VOSTFR [1080p].mp4'
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\[DJB] Shuumatsu no Harem (non-censuré) - 09 VOSTFR [1080p].mp4'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\[Tsundere-Raws] Ousama Ranking - 18 VOSTFR (VRV) [1080p].mkv'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\[Tsundere-Raws] Ousama Ranking - 21 VOSTFR (CR) [WEB 1080p x264 AAC].mkv'

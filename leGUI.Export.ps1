@@ -5,43 +5,46 @@
 #------------------------------------------------------------------------
 #region File Recovery Data (DO NOT MODIFY)
 <#RecoveryData:
-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
-XuVICAAA#>
+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#>
 #endregion
 
 <#
     .NOTES
     --------------------------------------------------------------------------------
      Code generated by:  SAPIEN Technologies, Inc., PowerShell Studio 2020 v5.7.172
-     Generated on:       11/03/2022 08:52
+     Generated on:       15/03/2022 09:52
      Generated by:       Nathan
     --------------------------------------------------------------------------------
     .DESCRIPTION
@@ -63,8 +66,8 @@ function Show-leGUI_psf {
 	#----------------------------------------------
 	#region Import the Assemblies
 	#----------------------------------------------
-	[void][reflection.assembly]::Load('System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
 	[void][reflection.assembly]::Load('System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
 	#endregion Import Assemblies
 
 	#----------------------------------------------
@@ -72,37 +75,40 @@ function Show-leGUI_psf {
 	#----------------------------------------------
 	[System.Windows.Forms.Application]::EnableVisualStyles()
 	$form1 = New-Object 'System.Windows.Forms.Form'
+	$button1 = New-Object 'System.Windows.Forms.Button'
+	$picturebox1 = New-Object 'System.Windows.Forms.PictureBox'
 	$Vidya = New-Object 'System.Windows.Forms.GroupBox'
 	$btnAccelerate = New-Object 'System.Windows.Forms.Button'
-	$button1 = New-Object 'System.Windows.Forms.Button'
+	$btnCountVideo = New-Object 'System.Windows.Forms.Button'
 	$panel6 = New-Object 'System.Windows.Forms.Panel'
-	$label1 = New-Object 'System.Windows.Forms.Label'
+	$lblVideo = New-Object 'System.Windows.Forms.Label'
 	$labelVideoFilesDetected = New-Object 'System.Windows.Forms.Label'
 	$grpbxMusic = New-Object 'System.Windows.Forms.GroupBox'
-	$buttonCount = New-Object 'System.Windows.Forms.Button'
+	$panelMusic = New-Object 'System.Windows.Forms.Panel'
+	$panel10 = New-Object 'System.Windows.Forms.Panel'
+	$txtTitle4 = New-Object 'System.Windows.Forms.TextBox'
+	$txtArtist4 = New-Object 'System.Windows.Forms.TextBox'
+	$label5 = New-Object 'System.Windows.Forms.Label'
+	$label6 = New-Object 'System.Windows.Forms.Label'
+	$panel9 = New-Object 'System.Windows.Forms.Panel'
+	$txtTitle3 = New-Object 'System.Windows.Forms.TextBox'
+	$txtArtist3 = New-Object 'System.Windows.Forms.TextBox'
+	$label3 = New-Object 'System.Windows.Forms.Label'
+	$label4 = New-Object 'System.Windows.Forms.Label'
+	$panel8 = New-Object 'System.Windows.Forms.Panel'
+	$txtTitle2 = New-Object 'System.Windows.Forms.TextBox'
+	$txtArtist2 = New-Object 'System.Windows.Forms.TextBox'
+	$label1 = New-Object 'System.Windows.Forms.Label'
+	$label2 = New-Object 'System.Windows.Forms.Label'
+	$panel1 = New-Object 'System.Windows.Forms.Panel'
+	$txtTitle1 = New-Object 'System.Windows.Forms.TextBox'
+	$txtArtist1 = New-Object 'System.Windows.Forms.TextBox'
+	$labelArtist = New-Object 'System.Windows.Forms.Label'
+	$labelTitle = New-Object 'System.Windows.Forms.Label'
+	$btnCountMusic = New-Object 'System.Windows.Forms.Button'
 	$panel5 = New-Object 'System.Windows.Forms.Panel'
 	$lblMusic = New-Object 'System.Windows.Forms.Label'
 	$labelMusicFilesDetected = New-Object 'System.Windows.Forms.Label'
-	$panel4 = New-Object 'System.Windows.Forms.Panel'
-	$textbox5 = New-Object 'System.Windows.Forms.TextBox'
-	$textbox6 = New-Object 'System.Windows.Forms.TextBox'
-	$label6 = New-Object 'System.Windows.Forms.Label'
-	$label7 = New-Object 'System.Windows.Forms.Label'
-	$panel3 = New-Object 'System.Windows.Forms.Panel'
-	$textbox3 = New-Object 'System.Windows.Forms.TextBox'
-	$textbox4 = New-Object 'System.Windows.Forms.TextBox'
-	$label4 = New-Object 'System.Windows.Forms.Label'
-	$label5 = New-Object 'System.Windows.Forms.Label'
-	$panel2 = New-Object 'System.Windows.Forms.Panel'
-	$textbox1 = New-Object 'System.Windows.Forms.TextBox'
-	$textbox2 = New-Object 'System.Windows.Forms.TextBox'
-	$label2 = New-Object 'System.Windows.Forms.Label'
-	$label3 = New-Object 'System.Windows.Forms.Label'
-	$panel1 = New-Object 'System.Windows.Forms.Panel'
-	$txtTitle = New-Object 'System.Windows.Forms.TextBox'
-	$txtArtist = New-Object 'System.Windows.Forms.TextBox'
-	$labelArtist = New-Object 'System.Windows.Forms.Label'
-	$labelTitle = New-Object 'System.Windows.Forms.Label'
 	$progressbar1 = New-Object 'System.Windows.Forms.ProgressBar'
 	$btnCompile = New-Object 'System.Windows.Forms.Button'
 	$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
@@ -111,15 +117,27 @@ function Show-leGUI_psf {
 	#----------------------------------------------
 	# User Generated Script
 	#----------------------------------------------
+	Add-Type -AssemblyName System.Windows.Forms
 	
-	$form1_Load={
-		#TODO: Initialize Form Controls here
+	$form1_Load = {
+		#TODO: Place custom script here
 		
-	}
-	
-	$form1_Load={
-		#TODO: Initialize Form Controls here
+		$jsonObject = Get-Content -Path .\soustitres.json | ConvertFrom-Json
+		$titles = $jsonObject.Titles
+		$artists = $jsonObject.Artists
 		
+		$txtTitle1.Text = $titles.1
+		$txtTitle2.Text = $titles.2
+		$txtTitle3.Text = $titles.3
+		$txtTitle4.Text = $titles.4
+		
+		$txtArtist1.Text = $artists.1
+		$txtArtist2.Text = $artists.2
+		$txtArtist3.Text = $artists.3
+		$txtArtist4.Text = $artists.4
+		
+		$lblVideo.Text = (Get-ChildItem -Path .\videos | Measure-Object).Count
+		$lblMusic.Text = (Get-ChildItem -Path .\musiques | Measure-Object).Count
 	}
 	
 	$labelArtist_Click={
@@ -143,24 +161,49 @@ function Show-leGUI_psf {
 		
 	}
 	
-	$txtArtist_TextChanged={
+	$txtArtist1_TextChanged={
 		#TODO: Place custom script here
 		
 	}
 	
-	$buttonCount_Click={
+	$btnCountMusic_Click={
 		#TODO: Place custom script here
-		
+		$lblMusic.Text = (Get-ChildItem -Path .\musiques | Measure-Object).Count
 	}
 	
 	$btnCompile_Click={
-		#TODO: Place custom script here
+		#TODO: Get text in panels and add to music files
 		
+		$myObject = [PSCustomObject]@{
+			Titles = [PSCustomObject]@{
+				1 = $txtTitle1.Text
+				2 = $txtTitle2.Text
+				3 = $txtTitle3.Text
+				4 = $txtTitle4.Text
+			}
+			Artists = [PSCustomObject]@{
+				1 = $txtArtist1.Text
+				2 = $txtArtist2.Text
+				3 = $txtArtist3.Text
+				4 = $txtArtist4.Text
+			}
+		}
+		
+		$myObject = ConvertTo-Json $myObject
+		$myObject | Out-File .\soustitres.json
+		
+		Invoke-Expression -Command .\editing.ps1
 	}
 	
 	$picturebox1_Click={
 		#TODO: Place custom script here
 		
+		$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{
+			InitialDirectory = [Environment]::GetFolderPath('Desktop')
+			Filter		     = 'PNG Image (*.png)|*.png|JPEG Image (*.jpg)|*.jpg,*.jpeg'
+		}
+		$null = $FileBrowser.ShowDialog()
+		$picturebox1.Image = [System.Drawing.Bitmap]::FromFile($FileBrowser.FileName)
 	}
 	
 	#region Control Helper Functions
@@ -216,6 +259,25 @@ function Show-leGUI_psf {
 	
 	#endregion
 	
+	$label1_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	$btnCountVideo_Click={
+		#TODO: Place custom script here
+		$lblVideo.Text = (Get-ChildItem -Path .\videos | Measure-Object).Count
+	}
+	
+	$lblMusic_Click={
+		#TODO: Place custom script here
+	}
+	
+	$button1_Click={
+		#TODO: Place custom script here
+		
+	}
+	
 	# --End User Generated Script--
 	#----------------------------------------------
 	#region Generated Events
@@ -232,17 +294,21 @@ function Show-leGUI_psf {
 		#Remove all event handlers from the controls
 		try
 		{
+			$button1.remove_Click($button1_Click)
+			$picturebox1.remove_Click($picturebox1_Click)
+			$btnCountVideo.remove_Click($btnCountVideo_Click)
 			$labelVideoFilesDetected.remove_Click($labelMusicFilesDetected_Click)
-			$buttonCount.remove_Click($buttonCount_Click)
-			$labelMusicFilesDetected.remove_Click($labelMusicFilesDetected_Click)
-			$textbox6.remove_TextChanged($txtArtist_TextChanged)
-			$panel4.remove_Paint($panel1_Paint)
-			$textbox4.remove_TextChanged($txtArtist_TextChanged)
-			$panel3.remove_Paint($panel1_Paint)
-			$textbox2.remove_TextChanged($txtArtist_TextChanged)
-			$panel2.remove_Paint($panel1_Paint)
-			$txtArtist.remove_TextChanged($txtArtist_TextChanged)
+			$txtArtist4.remove_TextChanged($txtArtist1_TextChanged)
+			$panel10.remove_Paint($panel1_Paint)
+			$txtArtist3.remove_TextChanged($txtArtist1_TextChanged)
+			$panel9.remove_Paint($panel1_Paint)
+			$txtArtist2.remove_TextChanged($txtArtist1_TextChanged)
+			$panel8.remove_Paint($panel1_Paint)
+			$txtArtist1.remove_TextChanged($txtArtist1_TextChanged)
 			$panel1.remove_Paint($panel1_Paint)
+			$btnCountMusic.remove_Click($btnCountMusic_Click)
+			$lblMusic.remove_Click($lblMusic_Click)
+			$labelMusicFilesDetected.remove_Click($labelMusicFilesDetected_Click)
 			$grpbxMusic.remove_Enter($grpbxMusic_Enter)
 			$btnCompile.remove_Click($btnCompile_Click)
 			$form1.remove_Load($form1_Load)
@@ -260,31 +326,57 @@ function Show-leGUI_psf {
 	$Vidya.SuspendLayout()
 	$panel6.SuspendLayout()
 	$grpbxMusic.SuspendLayout()
-	$panel5.SuspendLayout()
-	$panel4.SuspendLayout()
-	$panel3.SuspendLayout()
-	$panel2.SuspendLayout()
+	$panelMusic.SuspendLayout()
+	$panel10.SuspendLayout()
+	$panel9.SuspendLayout()
+	$panel8.SuspendLayout()
 	$panel1.SuspendLayout()
+	$panel5.SuspendLayout()
 	#
 	# form1
 	#
+	$form1.Controls.Add($button1)
+	$form1.Controls.Add($picturebox1)
 	$form1.Controls.Add($Vidya)
 	$form1.Controls.Add($grpbxMusic)
 	$form1.Controls.Add($progressbar1)
 	$form1.Controls.Add($btnCompile)
 	$form1.AutoScaleDimensions = '8, 17'
 	$form1.AutoScaleMode = 'Font'
-	$form1.ClientSize = '695, 574'
+	$form1.ClientSize = '695, 575'
 	$form1.Name = 'form1'
 	$form1.Text = 'Form'
 	$form1.add_Load($form1_Load)
 	#
+	# button1
+	#
+	$button1.Location = '466, 173'
+	$button1.Margin = '4, 4, 4, 4'
+	$button1.Name = 'button1'
+	$button1.Size = '100, 30'
+	$button1.TabIndex = 6
+	$button1.Text = 'button1'
+	$button1.UseCompatibleTextRendering = $True
+	$button1.UseVisualStyleBackColor = $True
+	$button1.add_Click($button1_Click)
+	#
+	# picturebox1
+	#
+	$picturebox1.Cursor = 'Hand'
+	$picturebox1.Location = '359, 215'
+	$picturebox1.Margin = '4, 4, 4, 4'
+	$picturebox1.Name = 'picturebox1'
+	$picturebox1.Size = '315, 315'
+	$picturebox1.TabIndex = 5
+	$picturebox1.TabStop = $False
+	$picturebox1.add_Click($picturebox1_Click)
+	#
 	# Vidya
 	#
 	$Vidya.Controls.Add($btnAccelerate)
-	$Vidya.Controls.Add($button1)
+	$Vidya.Controls.Add($btnCountVideo)
 	$Vidya.Controls.Add($panel6)
-	$Vidya.Location = '352, 13'
+	$Vidya.Location = '351, 13'
 	$Vidya.Margin = '4, 4, 4, 4'
 	$Vidya.Name = 'Vidya'
 	$Vidya.Padding = '4, 4, 4, 4'
@@ -305,20 +397,21 @@ function Show-leGUI_psf {
 	$btnAccelerate.UseCompatibleTextRendering = $True
 	$btnAccelerate.UseVisualStyleBackColor = $True
 	#
-	# button1
+	# btnCountVideo
 	#
-	$button1.Location = '223, 32'
-	$button1.Margin = '4, 4, 4, 4'
-	$button1.Name = 'button1'
-	$button1.Size = '100, 30'
-	$button1.TabIndex = 10
-	$button1.Text = 'Count'
-	$button1.UseCompatibleTextRendering = $True
-	$button1.UseVisualStyleBackColor = $True
+	$btnCountVideo.Location = '223, 32'
+	$btnCountVideo.Margin = '4, 4, 4, 4'
+	$btnCountVideo.Name = 'btnCountVideo'
+	$btnCountVideo.Size = '100, 30'
+	$btnCountVideo.TabIndex = 10
+	$btnCountVideo.Text = 'Count'
+	$btnCountVideo.UseCompatibleTextRendering = $True
+	$btnCountVideo.UseVisualStyleBackColor = $True
+	$btnCountVideo.add_Click($btnCountVideo_Click)
 	#
 	# panel6
 	#
-	$panel6.Controls.Add($label1)
+	$panel6.Controls.Add($lblVideo)
 	$panel6.Controls.Add($labelVideoFilesDetected)
 	$panel6.Location = '8, 24'
 	$panel6.Margin = '4, 4, 4, 4'
@@ -326,16 +419,16 @@ function Show-leGUI_psf {
 	$panel6.Size = '207, 46'
 	$panel6.TabIndex = 8
 	#
-	# label1
+	# lblVideo
 	#
-	$label1.AutoSize = $True
-	$label1.Location = '180, 12'
-	$label1.Margin = '4, 0, 4, 0'
-	$label1.Name = 'label1'
-	$label1.Size = '17, 21'
-	$label1.TabIndex = 7
-	$label1.Text = '...'
-	$label1.UseCompatibleTextRendering = $True
+	$lblVideo.AutoSize = $True
+	$lblVideo.Location = '180, 12'
+	$lblVideo.Margin = '4, 0, 4, 0'
+	$lblVideo.Name = 'lblVideo'
+	$lblVideo.Size = '17, 21'
+	$lblVideo.TabIndex = 7
+	$lblVideo.Text = '...'
+	$lblVideo.UseCompatibleTextRendering = $True
 	#
 	# labelVideoFilesDetected
 	#
@@ -352,12 +445,9 @@ function Show-leGUI_psf {
 	#
 	# grpbxMusic
 	#
-	$grpbxMusic.Controls.Add($buttonCount)
+	$grpbxMusic.Controls.Add($panelMusic)
+	$grpbxMusic.Controls.Add($btnCountMusic)
 	$grpbxMusic.Controls.Add($panel5)
-	$grpbxMusic.Controls.Add($panel4)
-	$grpbxMusic.Controls.Add($panel3)
-	$grpbxMusic.Controls.Add($panel2)
-	$grpbxMusic.Controls.Add($panel1)
 	$grpbxMusic.Location = '13, 13'
 	$grpbxMusic.Margin = '4, 4, 4, 4'
 	$grpbxMusic.Name = 'grpbxMusic'
@@ -369,251 +459,217 @@ function Show-leGUI_psf {
 	$grpbxMusic.UseCompatibleTextRendering = $True
 	$grpbxMusic.add_Enter($grpbxMusic_Enter)
 	#
-	# buttonCount
+	# panelMusic
 	#
-	$buttonCount.Location = '223, 32'
-	$buttonCount.Margin = '4, 4, 4, 4'
-	$buttonCount.Name = 'buttonCount'
-	$buttonCount.Size = '100, 30'
-	$buttonCount.TabIndex = 9
-	$buttonCount.Text = 'Count'
-	$buttonCount.UseCompatibleTextRendering = $True
-	$buttonCount.UseVisualStyleBackColor = $True
-	$buttonCount.add_Click($buttonCount_Click)
+	$panelMusic.Controls.Add($panel10)
+	$panelMusic.Controls.Add($panel9)
+	$panelMusic.Controls.Add($panel8)
+	$panelMusic.Controls.Add($panel1)
+	$panelMusic.Location = '8, 70'
+	$panelMusic.Margin = '4, 4, 4, 4'
+	$panelMusic.Name = 'panelMusic'
+	$panelMusic.Size = '315, 439'
+	$panelMusic.TabIndex = 10
 	#
-	# panel5
+	# panel10
 	#
-	$panel5.Controls.Add($lblMusic)
-	$panel5.Controls.Add($labelMusicFilesDetected)
-	$panel5.Location = '8, 24'
-	$panel5.Margin = '4, 4, 4, 4'
-	$panel5.Name = 'panel5'
-	$panel5.Size = '207, 46'
-	$panel5.TabIndex = 8
+	$panel10.Controls.Add($txtTitle4)
+	$panel10.Controls.Add($txtArtist4)
+	$panel10.Controls.Add($label5)
+	$panel10.Controls.Add($label6)
+	$panel10.Location = '7, 328'
+	$panel10.Margin = '4, 4, 4, 4'
+	$panel10.Name = 'panel10'
+	$panel10.Size = '304, 100'
+	$panel10.TabIndex = 7
+	$panel10.add_Paint($panel1_Paint)
 	#
-	# lblMusic
+	# txtTitle4
 	#
-	$lblMusic.AutoSize = $True
-	$lblMusic.Location = '180, 12'
-	$lblMusic.Margin = '4, 0, 4, 0'
-	$lblMusic.Name = 'lblMusic'
-	$lblMusic.Size = '17, 21'
-	$lblMusic.TabIndex = 7
-	$lblMusic.Text = '...'
-	$lblMusic.UseCompatibleTextRendering = $True
+	$txtTitle4.Location = '76, 4'
+	$txtTitle4.Margin = '4, 4, 4, 4'
+	$txtTitle4.Multiline = $True
+	$txtTitle4.Name = 'txtTitle4'
+	$txtTitle4.Size = '224, 50'
+	$txtTitle4.TabIndex = 2
 	#
-	# labelMusicFilesDetected
+	# txtArtist4
 	#
-	$labelMusicFilesDetected.AutoSize = $True
-	$labelMusicFilesDetected.Font = 'Open Sans, 9pt, style=Bold'
-	$labelMusicFilesDetected.Location = '8, 12'
-	$labelMusicFilesDetected.Margin = '4, 0, 4, 0'
-	$labelMusicFilesDetected.Name = 'labelMusicFilesDetected'
-	$labelMusicFilesDetected.Size = '164, 26'
-	$labelMusicFilesDetected.TabIndex = 6
-	$labelMusicFilesDetected.Text = 'Music files detected:'
-	$labelMusicFilesDetected.UseCompatibleTextRendering = $True
-	$labelMusicFilesDetected.add_Click($labelMusicFilesDetected_Click)
-	#
-	# panel4
-	#
-	$panel4.Controls.Add($textbox5)
-	$panel4.Controls.Add($textbox6)
-	$panel4.Controls.Add($label6)
-	$panel4.Controls.Add($label7)
-	$panel4.Location = '8, 410'
-	$panel4.Margin = '4, 4, 4, 4'
-	$panel4.Name = 'panel4'
-	$panel4.Size = '315, 99'
-	$panel4.TabIndex = 7
-	$panel4.add_Paint($panel1_Paint)
-	#
-	# textbox5
-	#
-	$textbox5.Location = '76, 4'
-	$textbox5.Margin = '4, 4, 4, 4'
-	$textbox5.Multiline = $True
-	$textbox5.Name = 'textbox5'
-	$textbox5.Size = '232, 50'
-	$textbox5.TabIndex = 2
-	#
-	# textbox6
-	#
-	$textbox6.Location = '76, 62'
-	$textbox6.Margin = '4, 4, 4, 4'
-	$textbox6.Multiline = $True
-	$textbox6.Name = 'textbox6'
-	$textbox6.Size = '232, 30'
-	$textbox6.TabIndex = 3
-	$textbox6.add_TextChanged($txtArtist_TextChanged)
-	#
-	# label6
-	#
-	$label6.AutoSize = $True
-	$label6.Font = 'Open Sans, 9pt, style=Bold'
-	$label6.Location = '4, 66'
-	$label6.Margin = '4, 0, 4, 0'
-	$label6.Name = 'label6'
-	$label6.Size = '49, 26'
-	$label6.TabIndex = 6
-	$label6.Text = 'Artist'
-	$label6.UseCompatibleTextRendering = $True
-	#
-	# label7
-	#
-	$label7.AutoSize = $True
-	$label7.Font = 'Open Sans, 9pt, style=Bold'
-	$label7.Location = '4, 18'
-	$label7.Margin = '4, 0, 4, 0'
-	$label7.Name = 'label7'
-	$label7.Size = '40, 26'
-	$label7.TabIndex = 5
-	$label7.Text = 'Title'
-	$label7.UseCompatibleTextRendering = $True
-	#
-	# panel3
-	#
-	$panel3.Controls.Add($textbox3)
-	$panel3.Controls.Add($textbox4)
-	$panel3.Controls.Add($label4)
-	$panel3.Controls.Add($label5)
-	$panel3.Location = '8, 305'
-	$panel3.Margin = '4, 4, 4, 4'
-	$panel3.Name = 'panel3'
-	$panel3.Size = '315, 99'
-	$panel3.TabIndex = 7
-	$panel3.add_Paint($panel1_Paint)
-	#
-	# textbox3
-	#
-	$textbox3.Location = '76, 4'
-	$textbox3.Margin = '4, 4, 4, 4'
-	$textbox3.Multiline = $True
-	$textbox3.Name = 'textbox3'
-	$textbox3.Size = '232, 50'
-	$textbox3.TabIndex = 2
-	#
-	# textbox4
-	#
-	$textbox4.Location = '76, 62'
-	$textbox4.Margin = '4, 4, 4, 4'
-	$textbox4.Multiline = $True
-	$textbox4.Name = 'textbox4'
-	$textbox4.Size = '232, 30'
-	$textbox4.TabIndex = 3
-	$textbox4.add_TextChanged($txtArtist_TextChanged)
-	#
-	# label4
-	#
-	$label4.AutoSize = $True
-	$label4.Font = 'Open Sans, 9pt, style=Bold'
-	$label4.Location = '4, 66'
-	$label4.Margin = '4, 0, 4, 0'
-	$label4.Name = 'label4'
-	$label4.Size = '49, 26'
-	$label4.TabIndex = 6
-	$label4.Text = 'Artist'
-	$label4.UseCompatibleTextRendering = $True
+	$txtArtist4.Location = '76, 62'
+	$txtArtist4.Margin = '4, 4, 4, 4'
+	$txtArtist4.Multiline = $True
+	$txtArtist4.Name = 'txtArtist4'
+	$txtArtist4.Size = '224, 30'
+	$txtArtist4.TabIndex = 3
+	$txtArtist4.add_TextChanged($txtArtist1_TextChanged)
 	#
 	# label5
 	#
 	$label5.AutoSize = $True
 	$label5.Font = 'Open Sans, 9pt, style=Bold'
-	$label5.Location = '4, 18'
+	$label5.Location = '4, 66'
 	$label5.Margin = '4, 0, 4, 0'
 	$label5.Name = 'label5'
-	$label5.Size = '40, 26'
-	$label5.TabIndex = 5
-	$label5.Text = 'Title'
+	$label5.Size = '49, 26'
+	$label5.TabIndex = 6
+	$label5.Text = 'Artist'
 	$label5.UseCompatibleTextRendering = $True
 	#
-	# panel2
+	# label6
 	#
-	$panel2.Controls.Add($textbox1)
-	$panel2.Controls.Add($textbox2)
-	$panel2.Controls.Add($label2)
-	$panel2.Controls.Add($label3)
-	$panel2.Location = '8, 198'
-	$panel2.Margin = '4, 4, 4, 4'
-	$panel2.Name = 'panel2'
-	$panel2.Size = '315, 99'
-	$panel2.TabIndex = 7
-	$panel2.add_Paint($panel1_Paint)
+	$label6.AutoSize = $True
+	$label6.Font = 'Open Sans, 9pt, style=Bold'
+	$label6.Location = '4, 18'
+	$label6.Margin = '4, 0, 4, 0'
+	$label6.Name = 'label6'
+	$label6.Size = '40, 26'
+	$label6.TabIndex = 5
+	$label6.Text = 'Title'
+	$label6.UseCompatibleTextRendering = $True
 	#
-	# textbox1
+	# panel9
 	#
-	$textbox1.Location = '76, 4'
-	$textbox1.Margin = '4, 4, 4, 4'
-	$textbox1.Multiline = $True
-	$textbox1.Name = 'textbox1'
-	$textbox1.Size = '232, 50'
-	$textbox1.TabIndex = 2
+	$panel9.Controls.Add($txtTitle3)
+	$panel9.Controls.Add($txtArtist3)
+	$panel9.Controls.Add($label3)
+	$panel9.Controls.Add($label4)
+	$panel9.Location = '8, 220'
+	$panel9.Margin = '4, 4, 4, 4'
+	$panel9.Name = 'panel9'
+	$panel9.Size = '304, 100'
+	$panel9.TabIndex = 7
+	$panel9.add_Paint($panel1_Paint)
 	#
-	# textbox2
+	# txtTitle3
 	#
-	$textbox2.Location = '76, 62'
-	$textbox2.Margin = '4, 4, 4, 4'
-	$textbox2.Multiline = $True
-	$textbox2.Name = 'textbox2'
-	$textbox2.Size = '232, 30'
-	$textbox2.TabIndex = 3
-	$textbox2.add_TextChanged($txtArtist_TextChanged)
+	$txtTitle3.Location = '76, 4'
+	$txtTitle3.Margin = '4, 4, 4, 4'
+	$txtTitle3.Multiline = $True
+	$txtTitle3.Name = 'txtTitle3'
+	$txtTitle3.Size = '224, 50'
+	$txtTitle3.TabIndex = 2
 	#
-	# label2
+	# txtArtist3
 	#
-	$label2.AutoSize = $True
-	$label2.Font = 'Open Sans, 9pt, style=Bold'
-	$label2.Location = '4, 66'
-	$label2.Margin = '4, 0, 4, 0'
-	$label2.Name = 'label2'
-	$label2.Size = '49, 26'
-	$label2.TabIndex = 6
-	$label2.Text = 'Artist'
-	$label2.UseCompatibleTextRendering = $True
+	$txtArtist3.Location = '76, 62'
+	$txtArtist3.Margin = '4, 4, 4, 4'
+	$txtArtist3.Multiline = $True
+	$txtArtist3.Name = 'txtArtist3'
+	$txtArtist3.Size = '224, 30'
+	$txtArtist3.TabIndex = 3
+	$txtArtist3.add_TextChanged($txtArtist1_TextChanged)
 	#
 	# label3
 	#
 	$label3.AutoSize = $True
 	$label3.Font = 'Open Sans, 9pt, style=Bold'
-	$label3.Location = '4, 18'
+	$label3.Location = '4, 66'
 	$label3.Margin = '4, 0, 4, 0'
 	$label3.Name = 'label3'
-	$label3.Size = '40, 26'
-	$label3.TabIndex = 5
-	$label3.Text = 'Title'
+	$label3.Size = '49, 26'
+	$label3.TabIndex = 6
+	$label3.Text = 'Artist'
 	$label3.UseCompatibleTextRendering = $True
+	#
+	# label4
+	#
+	$label4.AutoSize = $True
+	$label4.Font = 'Open Sans, 9pt, style=Bold'
+	$label4.Location = '4, 18'
+	$label4.Margin = '4, 0, 4, 0'
+	$label4.Name = 'label4'
+	$label4.Size = '40, 26'
+	$label4.TabIndex = 5
+	$label4.Text = 'Title'
+	$label4.UseCompatibleTextRendering = $True
+	#
+	# panel8
+	#
+	$panel8.Controls.Add($txtTitle2)
+	$panel8.Controls.Add($txtArtist2)
+	$panel8.Controls.Add($label1)
+	$panel8.Controls.Add($label2)
+	$panel8.Location = '7, 112'
+	$panel8.Margin = '4, 4, 4, 4'
+	$panel8.Name = 'panel8'
+	$panel8.Size = '304, 100'
+	$panel8.TabIndex = 7
+	$panel8.add_Paint($panel1_Paint)
+	#
+	# txtTitle2
+	#
+	$txtTitle2.Location = '76, 4'
+	$txtTitle2.Margin = '4, 4, 4, 4'
+	$txtTitle2.Multiline = $True
+	$txtTitle2.Name = 'txtTitle2'
+	$txtTitle2.Size = '224, 50'
+	$txtTitle2.TabIndex = 2
+	#
+	# txtArtist2
+	#
+	$txtArtist2.Location = '76, 62'
+	$txtArtist2.Margin = '4, 4, 4, 4'
+	$txtArtist2.Multiline = $True
+	$txtArtist2.Name = 'txtArtist2'
+	$txtArtist2.Size = '224, 30'
+	$txtArtist2.TabIndex = 3
+	$txtArtist2.add_TextChanged($txtArtist1_TextChanged)
+	#
+	# label1
+	#
+	$label1.AutoSize = $True
+	$label1.Font = 'Open Sans, 9pt, style=Bold'
+	$label1.Location = '4, 66'
+	$label1.Margin = '4, 0, 4, 0'
+	$label1.Name = 'label1'
+	$label1.Size = '49, 26'
+	$label1.TabIndex = 6
+	$label1.Text = 'Artist'
+	$label1.UseCompatibleTextRendering = $True
+	#
+	# label2
+	#
+	$label2.AutoSize = $True
+	$label2.Font = 'Open Sans, 9pt, style=Bold'
+	$label2.Location = '4, 18'
+	$label2.Margin = '4, 0, 4, 0'
+	$label2.Name = 'label2'
+	$label2.Size = '40, 26'
+	$label2.TabIndex = 5
+	$label2.Text = 'Title'
+	$label2.UseCompatibleTextRendering = $True
 	#
 	# panel1
 	#
-	$panel1.Controls.Add($txtTitle)
-	$panel1.Controls.Add($txtArtist)
+	$panel1.Controls.Add($txtTitle1)
+	$panel1.Controls.Add($txtArtist1)
 	$panel1.Controls.Add($labelArtist)
 	$panel1.Controls.Add($labelTitle)
-	$panel1.Location = '8, 91'
+	$panel1.Location = '7, 4'
 	$panel1.Margin = '4, 4, 4, 4'
 	$panel1.Name = 'panel1'
-	$panel1.Size = '315, 99'
+	$panel1.Size = '304, 100'
 	$panel1.TabIndex = 7
 	$panel1.add_Paint($panel1_Paint)
 	#
-	# txtTitle
+	# txtTitle1
 	#
-	$txtTitle.Location = '76, 4'
-	$txtTitle.Margin = '4, 4, 4, 4'
-	$txtTitle.Multiline = $True
-	$txtTitle.Name = 'txtTitle'
-	$txtTitle.Size = '232, 50'
-	$txtTitle.TabIndex = 2
+	$txtTitle1.Location = '76, 4'
+	$txtTitle1.Margin = '4, 4, 4, 4'
+	$txtTitle1.Multiline = $True
+	$txtTitle1.Name = 'txtTitle1'
+	$txtTitle1.Size = '224, 50'
+	$txtTitle1.TabIndex = 2
 	#
-	# txtArtist
+	# txtArtist1
 	#
-	$txtArtist.Location = '76, 62'
-	$txtArtist.Margin = '4, 4, 4, 4'
-	$txtArtist.Multiline = $True
-	$txtArtist.Name = 'txtArtist'
-	$txtArtist.Size = '232, 30'
-	$txtArtist.TabIndex = 3
-	$txtArtist.add_TextChanged($txtArtist_TextChanged)
+	$txtArtist1.Location = '76, 62'
+	$txtArtist1.Margin = '4, 4, 4, 4'
+	$txtArtist1.Multiline = $True
+	$txtArtist1.Name = 'txtArtist1'
+	$txtArtist1.Size = '224, 30'
+	$txtArtist1.TabIndex = 3
+	$txtArtist1.add_TextChanged($txtArtist1_TextChanged)
 	#
 	# labelArtist
 	#
@@ -639,6 +695,53 @@ function Show-leGUI_psf {
 	$labelTitle.Text = 'Title'
 	$labelTitle.UseCompatibleTextRendering = $True
 	#
+	# btnCountMusic
+	#
+	$btnCountMusic.Location = '223, 32'
+	$btnCountMusic.Margin = '4, 4, 4, 4'
+	$btnCountMusic.Name = 'btnCountMusic'
+	$btnCountMusic.Size = '100, 30'
+	$btnCountMusic.TabIndex = 9
+	$btnCountMusic.Text = 'Count'
+	$btnCountMusic.UseCompatibleTextRendering = $True
+	$btnCountMusic.UseVisualStyleBackColor = $True
+	$btnCountMusic.add_Click($btnCountMusic_Click)
+	#
+	# panel5
+	#
+	$panel5.Controls.Add($lblMusic)
+	$panel5.Controls.Add($labelMusicFilesDetected)
+	$panel5.Location = '8, 24'
+	$panel5.Margin = '4, 4, 4, 4'
+	$panel5.Name = 'panel5'
+	$panel5.Size = '207, 46'
+	$panel5.TabIndex = 8
+	#
+	# lblMusic
+	#
+	$lblMusic.AutoSize = $True
+	$lblMusic.Location = '180, 12'
+	$lblMusic.Margin = '4, 0, 4, 0'
+	$lblMusic.Name = 'lblMusic'
+	$lblMusic.Size = '17, 21'
+	$lblMusic.TabIndex = 7
+	$lblMusic.Text = '...'
+	$lblMusic.UseCompatibleTextRendering = $True
+	$lblMusic.add_Click($lblMusic_Click)
+	#
+	# labelMusicFilesDetected
+	#
+	$labelMusicFilesDetected.AutoSize = $True
+	$labelMusicFilesDetected.Font = 'Open Sans, 9pt, style=Bold'
+	$labelMusicFilesDetected.Location = '8, 12'
+	$labelMusicFilesDetected.Margin = '4, 0, 4, 0'
+	$labelMusicFilesDetected.Name = 'labelMusicFilesDetected'
+	$labelMusicFilesDetected.Size = '164, 26'
+	$labelMusicFilesDetected.TabIndex = 6
+	$labelMusicFilesDetected.Text = 'Music files detected:'
+	$labelMusicFilesDetected.UseCompatibleTextRendering = $True
+	$labelMusicFilesDetected.add_Click($labelMusicFilesDetected_Click)
+	#
 	# progressbar1
 	#
 	$progressbar1.Location = '13, 538'
@@ -659,11 +762,12 @@ function Show-leGUI_psf {
 	$btnCompile.UseCompatibleTextRendering = $True
 	$btnCompile.UseVisualStyleBackColor = $True
 	$btnCompile.add_Click($btnCompile_Click)
-	$panel1.ResumeLayout()
-	$panel2.ResumeLayout()
-	$panel3.ResumeLayout()
-	$panel4.ResumeLayout()
 	$panel5.ResumeLayout()
+	$panel1.ResumeLayout()
+	$panel8.ResumeLayout()
+	$panel9.ResumeLayout()
+	$panel10.ResumeLayout()
+	$panelMusic.ResumeLayout()
 	$grpbxMusic.ResumeLayout()
 	$panel6.ResumeLayout()
 	$Vidya.ResumeLayout()

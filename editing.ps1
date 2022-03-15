@@ -9,7 +9,7 @@ PLAN
     10.4) Texte "Total work time": 5s total, fade in 1s, fade out 1s
 #> 
 
-$ourbals = 0
+$ourbals = 1
 
 if ($ourbals -eq 1)
 {
@@ -20,7 +20,7 @@ if ($ourbals -eq 1)
     Clear-Content .\videos.txt
     foreach ($file in Get-ChildItem .\videos\* -Include @("*.mp4", "*.mkv")) {
         # Write-Host "file '${file}'"
-        "file `"${file}`"" | Out-File -Encoding utf8NoBOM -Append -FilePath .\videos.txt
+        "file '${file}'" | Out-File -Encoding utf8NoBOM -Append -FilePath .\videos.txt
     }
     # endregion
 
@@ -59,26 +59,35 @@ if ($ourbals -eq 1)
         $videoLength += $duration
     }
     $videoLength = [math]::ceiling($videoLength)
-    Write-Host "Longueur vidéo : $videoLength secondes" -ForegroundColor Magenta
+    Write-Host "Longueur vidéo : $videoLength secondes ou $([math]::Floor($videoLength/60))m$($videoLength%60)s" -ForegroundColor Magenta
 
     #### TIMELAPSE
 
     # Changement de programme :
     # Concaténer toutes les vidéos, et utiliser ça en tant que $video
-    # Fusionner les deux scripts. Les vidéos sont concaténées, on vire les images dupliquées, puis on accélère ça
+    # Fusionner les deux scripts. Les vidéos sont concaténées, accélérées en x20 avec débit constant à 60FPS, on vire les images dupliquées, puis on accélère ça
+    #   > C'est super long nondidjû
     # À voir si le script existant fait autre chose, de mémoire non
 
-    # ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\videos.txt -c:v copy -c:a copy outputS.mp4
-    # ffmpeg -i .\temp\speedFat.mkv -vf "mpdecimate,setpts=N/FRAME_RATE/TB" speed.mkv
+    # Concaténation
+    # ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\videos.txt -c:v copy -an .\temp\concat.mp4
+    # exit
+    # Déduplication
+    $concatFramerate = ffprobe -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate .\temp\concat.mp4
+    $frate = [math]::Round((Invoke-Expression "$concatFramerate"))
+    Write-Host $frate
+    ffmpeg -y -loglevel error -stats -i .\temp\concat.mp4 -vf "mpdecimate,setpts=${1/(60/$frate)}" -r 60 .\temp\concatSlim.mkv
+    exit
     
-    $video = ".\videos\sortie.mkv" ##### À REMPLACER PAR LE TIMELAPSE
+    $video = ".\temp\concatSlim.mkv" ##### À REMPLACER PAR LE TIMELAPSE
     $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
     $speedUpFactor = $audioLength / $videoLength
     $tempVal = $videoLength - (20/$speedUpFactor)
 
     #### Cut the number of frames to length desired
     Write-Host "Cutting to length" -ForegroundColor Magenta
-    ffmpeg -y -loglevel -i $video -t $tempVal -c:v copy .\temp\trimmed.mkv
+    # ffmpeg -y -loglevel error -stats -i $video -t $tempVal -c:v copy .\temp\trimmed.mkv
+    # exit
 
     #### Compute the fade out 
     $frames = ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 .\temp\trimmed.mkv
@@ -86,7 +95,8 @@ if ($ourbals -eq 1)
     $fadeOutStart = ($frames - 1.5 * ($framerate / $speedUpFactor))
 
     Write-Host "Speeding up and adding fades" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -i .\temp\trimmed.mkv -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speedFat.mkv
+    ffmpeg -y -loglevel error -stats -i .\temp\trimmed.mkv -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
+    exit
     # endregion
     
 
@@ -226,9 +236,10 @@ if ($ourbals -eq 1)
     $subtitleFilter = $subtitleFilter.TrimEnd(", ")
     echo $subtitleFilter
     Write-Host "Burning in subtitles and watermark`nH.265 remux" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -i .\temp\overlayed.mkv -i .\wm.png -filter_complex "[1:v]scale=-1:170 [ovrl],[0:v][ovrl]overlay=10:10" -codec:v libx265 -crf 18 -preset medium -codec:a copy .\out\output.mp4
+    ffmpeg -y -loglevel error -stats -i .\temp\nosub.mkv -i .\wm.png -filter_complex "[1:v]scale=-1:170 [ovrl],[0:v][ovrl]overlay=10:10" -codec:v libx265 -crf 18 -preset medium -codec:a copy .\out\output.mp4
     # endregion
 }
+
 
 # ffplay -y -loglevel error -stats -i .\temp\nosub.mkv -vf "" -codec:v libx265 -crf 18 -preset medium -codec:a copy
 # ffmpeg -y -loglevel error -stats -i .\temp\overlayed.mkv -i .\img.png -filter_complex "[1:v]scale=-1:170 [ovrl],[0:v][ovrl]overlay=10:10" -codec:v libx265 -crf 18 -preset medium -codec:a copy output.mp4
