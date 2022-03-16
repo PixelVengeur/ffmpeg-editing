@@ -46,7 +46,7 @@ if (-not(Test-Path -Path $temp -PathType Container)) {
 # Accélérer chaque vidéo une à une
 ForEach ($file in Get-ChildItem -Path $sourceDir -Name -Include @("*.mkv")) {
     Write-Host "Speeding up $file" -ForegroundColor Yellow
-    # ffmpeg -y -i "$sourceDir\$file" -hide_banner -loglevel error -stats -max_interleave_delta 0 -filter:v "setpts=PTS/$pts" -an -r $fps $temp\Fast$file
+    ffmpeg -y -i "$sourceDir\$file" -hide_banner -loglevel error -stats -max_interleave_delta 0 -filter:v "setpts=PTS/$pts" -an -r $fps $temp\Fast$file
 }
 
 Write-Host "All footage has been sped up`nConcatenating sped-up footage" -ForegroundColor Yellow

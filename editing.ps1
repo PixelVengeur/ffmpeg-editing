@@ -14,7 +14,7 @@ $ourbals = 1
 if ($ourbals -eq 1)
 {
     # VIDEO
-    $image = "C:\Users\Nathan\OneDrive\Images\Teasing Master VG.png"
+    $image = "C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\Capture d’écran 2022-03-16 152506.png"
 
     # region Lister toutes les vidéos
     Clear-Content .\videos.txt
@@ -62,7 +62,7 @@ if ($ourbals -eq 1)
     }
     $videoLength = [math]::ceiling($videoLength)
     $videoShort = $videoLength/20
-    Write-Host "Longueur vidéo : $videoShort secondes ou $([math]::Floor($videoShort/60))m$($videoShort%60)s" -ForegroundColor Magenta
+    Write-Host "Longueur vidéo pré traitement : $videoShort secondes ou $([math]::Floor($videoShort/60))m$($videoShort%60)s" -ForegroundColor Magenta
 
     if ($audioLength > ($videoLength/20))
     {
@@ -71,33 +71,25 @@ if ($ourbals -eq 1)
 
     #### TIMELAPSE
     $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
-    # $returnValue = & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
-    # Write-Host -ForegroundColor Green "returnValue = $returnValue"
+    $returnValue = & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
+    Write-Host -ForegroundColor Green "returnValue = $returnValue"
 
     $video = ".\temp\speedup\Timelapse.mkv"
     $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
-    Write-Host "duration = $duration" -ForegroundColor Green
+    Write-Host "Longueur vidéo post traitement = $duration secondes ou $([math]::Floor($duration/60))m$($duration%60)s" -ForegroundColor Magenta
 
     $speedUpFactor = $audioLength / ([Int32]$duration + 20)
-    Write-Host -ForegroundColor Blue "$speedUpFactor, $duration"
+    # Write-Host -ForegroundColor Blue "$speedUpFactor, $duration"
     $target = $speedUpFactor * $duration
-    Write-Host -ForegroundColor Magenta "Target length: $target"
-    # $videoCut = $audioLength - 20
-    # Write-Host -ForegroundColor Green "videoCut = $videoCut"
-    # exit
-
-    #### Cut the number of frames to length desired
-    # Write-Host "Cutting to length" -ForegroundColor Magenta
-    # ffmpeg -y -loglevel error -stats -i $video -t $videoCut -c:v copy .\temp\trimmed.mkv
-    # exit
-
+    # Write-Host -ForegroundColor Magenta "Target length: $target"
+   
     #### Compute the fade out 
     $frames = ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 $video
     $framerate = [math]::ceiling($frames / $duration)
     $fadeOutStart = ($frames - 1.5 * ($framerate / $speedUpFactor))
 
     Write-Host "Speeding up and adding fades" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -i $video -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
+    # ffmpeg -y -loglevel error -stats -i $video -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
     
     # endregion
     
