@@ -2,8 +2,10 @@
 param([string]$sourceDir = "",
 [string]$temp = "",
 [Int32]$pts = -1,
-[Int32]$fps = -1)
+[Int32]$fps = -1,
+[string]$del = "")
 
+#region __main__
 if ($sourceDir -eq "")
 {
     $sourceDir = Read-Host "Path to the folder containing the footage to speed up (type . for the current folder)"
@@ -23,7 +25,7 @@ if ($fps -eq -1)
 {
     $fps = Read-Host "Target FPS"
 }
-
+#endregion
 
 if ($sourceDir -eq $temp) {
     $temp = "$sourceDir/temp"
@@ -42,24 +44,12 @@ if (-not(Test-Path -Path $temp -PathType Container)) {
 }
 
 # Accélérer chaque vidéo une à une
-ForEach ($file in Get-ChildItem -Path $sourceDir) {
-    if ($file -match "([0-9].mkv)$") {
-        Write-Host "Speeding up $file" -ForegroundColor Yellow
-        ffmpeg -y -i $sourceDir\$file -hide_banner -loglevel error -stats -max_interleave_delta 0 -filter:v "setpts=PTS/$pts" -an -r $fps $temp\Fast$file
-    }
+ForEach ($file in Get-ChildItem -Path $sourceDir -Name -Include @("*.mkv")) {
+    Write-Host "Speeding up $file" -ForegroundColor Yellow
+    # ffmpeg -y -i "$sourceDir\$file" -hide_banner -loglevel error -stats -max_interleave_delta 0 -filter:v "setpts=PTS/$pts" -an -r $fps $temp\Fast$file
 }
 
-Write-Host "All footage has been sped up" -ForegroundColor Yellow
-
-# Supprimer les frames en double dans chaque fichier accéléré
-#ForEach ($file in Get-ChildItem $temp){
-#    if ($file -match "(.mkv)$") {
-#        echo "Cleaning up $file"
-#        ffmpeg -i $temp\$file -loglevel error -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 $temp\Clean$file
-#    }
-#}
-
-Write-Host "Concatenating sped-up footage" -ForegroundColor Yellow
+Write-Host "All footage has been sped up`nConcatenating sped-up footage" -ForegroundColor Yellow
 
 # Vérifier si list.txt existe
 if (-not(Test-Path -Path $temp\list.txt -PathType Leaf)) {
@@ -83,11 +73,14 @@ ffmpeg -loglevel error -stats -f concat -safe 0 -i ${temp}\list.txt -c copy $tem
 
 #Nettoyer le fichier concaténé
 Write-Host "Cleaning up the timelapse" -ForegroundColor Yellow
-ffmpeg -i $temp\output.mkv -loglevel error -stats -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 $sourceDir\Timelapse.mkv
+ffmpeg -i $temp\output.mkv -loglevel error -stats -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 $temp\Timelapse.mkv
 
 ## CLEANUP
 # Supprimer le dossier temp récursivement
-$del = Read-Host "Do you want to delete the temporary directory and all its content? (Y/N)"
+if ($del -eq "")
+{
+    $del = Read-Host "Do you want to delete the temporary directory and all its content? (Y/N)"
+}
 
 if ($del -eq "y" -or $del -eq "Y") {
     try {
@@ -97,3 +90,5 @@ if ($del -eq "y" -or $del -eq "Y") {
         "An error occured removing a temporary file"
     }
 }
+
+return "$sourceDir\Timelapse.mkv"

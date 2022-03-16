@@ -14,13 +14,13 @@ $ourbals = 1
 if ($ourbals -eq 1)
 {
     # VIDEO
-    $image = "C:\Users\pixel\OneDrive\Images\Teasing Master VG.png"
+    $image = "C:\Users\Nathan\OneDrive\Images\Teasing Master VG.png"
 
     # region Lister toutes les vidéos
     Clear-Content .\videos.txt
     foreach ($file in Get-ChildItem .\videos\* -Include @("*.mkv")) {
-        # Write-Host "file '${file}'"
         $filePath ="file '$file'"
+        # Write-Host "file '${filePath}'"
         Add-Content -Path .\videos.txt -Value $filePath
     }
     # endregion
@@ -29,8 +29,8 @@ if ($ourbals -eq 1)
     # region Lister tous les audios
     Clear-Content .\audios.txt
     foreach ($file in Get-ChildItem .\musiques\* -Include @("*.wav")) {
-        # Write-Host "file '${file}'"
         $filePath ="file '$file'"
+        # Write-Host "file '${filePath}'"
         Add-Content -Path .\audios.txt -Value $filePath
     }
     # endregion
@@ -61,47 +61,43 @@ if ($ourbals -eq 1)
         $videoLength += $duration
     }
     $videoLength = [math]::ceiling($videoLength)
-    Write-Host "Longueur vidéo : $videoLength secondes ou $([math]::Floor($videoLength/60))m$($videoLength%60)s" -ForegroundColor Magenta
+    $videoShort = $videoLength/20
+    Write-Host "Longueur vidéo : $videoShort secondes ou $([math]::Floor($videoShort/60))m$($videoShort%60)s" -ForegroundColor Magenta
+
+    if ($audioLength > ($videoLength/20))
+    {
+        Write-Host -ForegroundColor DarkRed "There is not enough video footage to span the entire length of the songs.`nPlease remove some music or add more video files."
+    }
 
     #### TIMELAPSE
-
-    # Changement de programme :
-    # Concaténer toutes les vidéos, et utiliser ça en tant que $video
-    # Fusionner les deux scripts. Les vidéos sont concaténées, accélérées en x20 avec débit constant à 60FPS, on vire les images dupliquées, puis on accélère ça
-    #   > C'est super long nondidjû
-    # À voir si le script existant fait autre chose, de mémoire non
-
-    # Concaténation
-    # ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\videos.txt -c:v copy -an .\temp\concat.mp4
-    # exit
-    # Déduplication
-    # $concatFramerate = ffprobe -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate .\temp\concat.mp4
-    # $frate = [math]::Round((Invoke-Expression "$concatFramerate"))
-    # Write-Host $frate
-    # ffmpeg -y -loglevel error -stats -i .\temp\concat.mp4 -vf "mpdecimate,setpts=${1/(60/$frate)}" -r 60 .\temp\concatSlim.mkv
-    # exit
-    # $video = ".\temp\concatSlim.mkv" ##### À REMPLACER PAR LE TIMELAPSE
-
     $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
-    # & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60
+    # $returnValue = & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
+    # Write-Host -ForegroundColor Green "returnValue = $returnValue"
 
-    $video = ".\videos\Timelapse.mkv"
+    $video = ".\temp\speedup\Timelapse.mkv"
     $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
-    $speedUpFactor = $audioLength / $videoLength
-    $tempVal = $videoLength - (20/$speedUpFactor)
+    Write-Host "duration = $duration" -ForegroundColor Green
+
+    $speedUpFactor = $audioLength / ([Int32]$duration + 20)
+    Write-Host -ForegroundColor Blue "$speedUpFactor, $duration"
+    $target = $speedUpFactor * $duration
+    Write-Host -ForegroundColor Magenta "Target length: $target"
+    # $videoCut = $audioLength - 20
+    # Write-Host -ForegroundColor Green "videoCut = $videoCut"
+    # exit
 
     #### Cut the number of frames to length desired
-    Write-Host "Cutting to length" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -i $video -t $tempVal -c:v copy .\temp\trimmed.mkv
+    # Write-Host "Cutting to length" -ForegroundColor Magenta
+    # ffmpeg -y -loglevel error -stats -i $video -t $videoCut -c:v copy .\temp\trimmed.mkv
     # exit
 
     #### Compute the fade out 
-    $frames = ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 .\temp\trimmed.mkv
+    $frames = ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 $video
     $framerate = [math]::ceiling($frames / $duration)
     $fadeOutStart = ($frames - 1.5 * ($framerate / $speedUpFactor))
 
     Write-Host "Speeding up and adding fades" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -i .\temp\trimmed.mkv -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
+    ffmpeg -y -loglevel error -stats -i $video -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
     
     # endregion
     
@@ -183,11 +179,7 @@ if ($ourbals -eq 1)
 
     # endregion
 
-    function generateTextBlurb {
-        # 10.2) Générer les textes de musique.
-        # Open Sans Bold.
-        # Musique en police 40 #FFF, compositeur en police 32 + RGB(192, 192, 192)
-    
+    function generateTextBlurb {    
         param ($startTS, $title, $artist)
     
         $tempVal = ""
@@ -241,8 +233,9 @@ if ($ourbals -eq 1)
 
     $subtitleFilter = $subtitleFilter.TrimEnd(", ")
     # echo $subtitleFilter
+    exit
     Write-Host "Burning in subtitles and watermark`nH.265 remux" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -i .\wm.png -filter_complex "[1:v]scale=-1:170 [ovrl],[0:v][ovrl]overlay=10:10" -codec:v libx265 -crf 18 -preset medium -codec:a copy .\out\output.mp4
+    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -i .\wm.png -filter_complex "[1:v]scale=-1:240 [ovrl],[0:v][ovrl]overlay=20:20" -codec:v libx265 -crf 18 -preset medium -codec:a copy .\out\output.mp4
     # endregion
 }
 
