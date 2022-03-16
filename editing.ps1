@@ -14,7 +14,7 @@ $ourbals = 1
 if ($ourbals -eq 1)
 {
     # VIDEO
-    $image = "C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\Capture d’écran 2022-03-16 152506.png"
+    $image = "Z:\Renders\Watermarked\TracerPussyDomination - WM.png"
 
     # region Lister toutes les vidéos
     Clear-Content .\videos.txt
@@ -64,24 +64,23 @@ if ($ourbals -eq 1)
     $videoShort = $videoLength/20
     Write-Host "Longueur vidéo pré traitement : $videoShort secondes ou $([math]::Floor($videoShort/60))m$($videoShort%60)s" -ForegroundColor Magenta
 
-    if ($audioLength > ($videoLength/20))
+    if ($audioLength -gt ($videoLength/20))
     {
         Write-Host -ForegroundColor DarkRed "There is not enough video footage to span the entire length of the songs.`nPlease remove some music or add more video files."
     }
 
     #### TIMELAPSE
-    $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
-    $returnValue = & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
-    Write-Host -ForegroundColor Green "returnValue = $returnValue"
+    # $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
+    # & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
 
     $video = ".\temp\speedup\Timelapse.mkv"
     $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
     Write-Host "Longueur vidéo post traitement = $duration secondes ou $([math]::Floor($duration/60))m$($duration%60)s" -ForegroundColor Magenta
 
     $speedUpFactor = $audioLength / ([Int32]$duration + 20)
-    # Write-Host -ForegroundColor Blue "$speedUpFactor, $duration"
+    Write-Host -ForegroundColor Blue "$speedUpFactor, $duration"
     $target = $speedUpFactor * $duration
-    # Write-Host -ForegroundColor Magenta "Target length: $target"
+    Write-Host -ForegroundColor Magenta "Target length: $target"
    
     #### Compute the fade out 
     $frames = ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 $video
@@ -92,7 +91,6 @@ if ($ourbals -eq 1)
     # ffmpeg -y -loglevel error -stats -i $video -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
     
     # endregion
-    
 
     # region Écran de fin de vidéo
 
@@ -105,11 +103,11 @@ if ($ourbals -eq 1)
     # Write-Host "Vidéo: $videoW x $videoH, Image: $imageW x $imageH"
 
     if ($imageW -gt $imageH) {
-        $ratio = $imageW / $imageH
+        # $ratio = $imageW / $imageH
         ffmpeg -y -loglevel error -stats -i $image -vf scale=-1:${videoH}*1.15 .\temp\top.jpg
     }
     else {
-        $ratio = $imageH / $imageW
+        # $ratio = $imageH / $imageW
         ffmpeg -y -loglevel error -stats -i $image -vf scale=${videoW}*0.65:-1 .\temp\top.jpg
     }
 
@@ -133,7 +131,7 @@ if ($ourbals -eq 1)
     $pps = $hiddenHeight / 15
 
     Write-Host "`tBottom" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -loop 1 -i .\temp\bottom.jpg -i .\temp\speed.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 - ${hiddenHeight}) + t*$pps" -r 60 -t 20 .\temp\bottom.mkv
+    # ffmpeg -y -loglevel error -stats -loop 1 -i .\temp\bottom.jpg -i .\temp\speed.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 - ${hiddenHeight}) + t*$pps" -r 60 -t 20 .\temp\bottom.mkv
 
 
     #### Top
@@ -144,9 +142,9 @@ if ($ourbals -eq 1)
     $pps = $hiddenHeight /10
 
     Write-Host "`tTop" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -loop 1 -i .\temp\top.jpg -i .\temp\bottom.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 + $hiddenHeight) - t*$pps,
-    fade=t=in:st=0:d=1.5,
-    fade=t=out:st=17:d=3" -r 60 -t 20 .\temp\overlayed.mkv
+    # ffmpeg -y -loglevel error -stats -loop 1 -i .\temp\top.jpg -i .\temp\bottom.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 + $hiddenHeight) - t*$pps,
+    # fade=t=in:st=0:d=1.5,
+    # fade=t=out:st=17:d=3" -r 60 -t 20 .\temp\overlayed.mkv
 
     ##TODO "Total work time"
 
@@ -225,9 +223,9 @@ if ($ourbals -eq 1)
 
     $subtitleFilter = $subtitleFilter.TrimEnd(", ")
     # echo $subtitleFilter
-    exit
-    Write-Host "Burning in subtitles and watermark`nH.265 remux" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -i .\wm.png -filter_complex "[1:v]scale=-1:240 [ovrl],[0:v][ovrl]overlay=20:20" -codec:v libx265 -crf 18 -preset medium -codec:a copy .\out\output.mp4
+    
+    Write-Host "Burning in subtitles and watermark`nWEBM reencode" -ForegroundColor Magenta
+    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -i .\wm.png -filter_complex "[1:v]scale=-1:240 [ovrl],[0:v][ovrl]overlay=20:20" -codec:v libvpx-vp9 -vb 3000k -codec:a copy .\out\output.webm
     # endregion
 }
 
