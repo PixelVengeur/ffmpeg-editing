@@ -7,14 +7,47 @@ PLAN
             16 frame de fade out texte
             11 frames de réduction rectangle
     10.4) Texte "Total work time": 5s total, fade in 1s, fade out 1s
-#> 
+#>
 
+function generateTextBlurb {    
+    param ($startTS, $title, $artist)
+
+    $tempVal = ""
+
+    $filterTitle = "drawtext=
+    text=${title}
+    :shadowx=4
+    :shadowy=3
+    :shadowcolor=black@0.35
+    :borderw=2
+    :bordercolor=black@0.25
+    :fontfile=C\\:/Users/pixel/AppData/Local/Microsoft/Windows/Fonts/OpenSans-Bold.ttf
+    :fontcolor=#ffffff@0.9
+    :fontsize=48
+    :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
+    :x=50
+    :y=(h-text_h)/10*9"
+    $filterArtist = "drawtext=
+    text=${artist}
+    :shadowx=4
+    :shadowy=3
+    :shadowcolor=black@0.35
+    :borderw=2
+    :bordercolor=black@0.25
+    :fontfile=C\\:/Users/pixel/AppData/Local/Microsoft/Windows/Fonts/OpenSans-Bold.ttf
+    :fontcolor=#c0c0c0@0.9
+    :fontsize=36
+    :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
+    :x=50
+    :y=(h-text_h)/10*9 + 40"
+    return "$filterTitle,$filterArtist"
+}
 $ourbals = 1
 
 if ($ourbals -eq 1)
 {
     # VIDEO
-    $image = "C:\Users\Nathan\Pictures\Screenshots\Capture d’écran (1).png"
+    $image = "Z:\Renders\Watermarked\TracerPussyDomination - WM.jpg"
 
     # region Lister toutes les vidéos
     Clear-Content .\videos.txt
@@ -70,8 +103,8 @@ if ($ourbals -eq 1)
     }
 
     #### TIMELAPSE
-    $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
-    & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
+    # $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
+    # & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
 
     $video = ".\temp\speedup\Timelapse.mkv"
     $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
@@ -89,7 +122,7 @@ if ($ourbals -eq 1)
     $fadeOutStart = ($frames - 1.5 * ($framerate / $speedUpFactor))
 
     Write-Host "Speeding up and adding fades" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -i $video -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
+    # ffmpeg -y -loglevel error -stats -i $video -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
     
     # endregion
 
@@ -135,7 +168,7 @@ if ($ourbals -eq 1)
     $pps = $hiddenHeight / 10
 
     Write-Host "`tBottom" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -loop 1 -r 60 -i .\temp\bottom.jpg -i .\temp\speed.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 - ${hiddenHeight}) + t*$pps" -r 60 -t 20 .\temp\bottom.mkv
+    # ffmpeg -y -loglevel error -stats -loop 1 -r 60 -i .\temp\bottom.jpg -i .\temp\speed.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 - ${hiddenHeight}) + t*$pps" -r 60 -t 20 .\temp\bottom.mkv
 
 
     #### Top
@@ -146,9 +179,9 @@ if ($ourbals -eq 1)
     $pps = $hiddenHeight/10
 
     Write-Host "`tTop" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -loop 1 -r 60 -i .\temp\top.jpg -i .\temp\bottom.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 + $hiddenHeight) - t*$pps,
-    fade=t=in:st=0:d=1.5,
-    fade=t=out:st=17:d=3" -r 60 -t 20 .\temp\overlayed.mkv
+    # ffmpeg -y -loglevel error -stats -loop 1 -r 60 -i .\temp\top.jpg -i .\temp\bottom.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 + $hiddenHeight) - t*$pps,
+    # fade=t=in:st=0:d=1.5,
+    # fade=t=out:st=17:d=3" -r 60 -t 20 .\temp\overlayed.mkv
 
     ##TODO "Total work time"
 
@@ -157,55 +190,22 @@ if ($ourbals -eq 1)
     
     # region Ajouter l'écran de fin à la vidéo
     Write-Host "Concatenating" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\concat.ffmpeg -c copy .\temp\output.mkv 
+    # ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\concat.ffmpeg -c copy .\temp\output.mkv 
     # endregion
 
 
     # region Ajouter la musique
     Write-Host "Adding music" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\audios.txt -c copy .\temp\output.wav
+    # ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\audios.txt -c copy .\temp\output.wav
 
     $audioFadeStart = $audioLength - 5
 
-    ffmpeg -y -loglevel error -stats -i .\temp\output.wav -af "afade=t=out:st=${audioFadeStart}:d=5" .\temp\outputFade.wav
+    # ffmpeg -y -loglevel error -stats -i .\temp\output.wav -af "afade=t=out:st=${audioFadeStart}:d=5" .\temp\outputFade.wav
 
-    ffmpeg -y -loglevel error -stats -i .\temp\output.mkv -i .\temp\outputFade.wav -map 0:v -map 1:a -c:v copy .\temp\nosub.mkv
+    # ffmpeg -y -loglevel error -stats -i .\temp\output.mkv -i .\temp\outputFade.wav -map 0:v -map 1:a -c:v copy .\temp\nosub.mkv
 
     # endregion
 
-    function generateTextBlurb {    
-        param ($startTS, $title, $artist)
-    
-        $tempVal = ""
-    
-        $filterTitle = "drawtext=
-        text=${title}
-        :shadowx=4
-        :shadowy=3
-        :shadowcolor=black@0.35
-        :borderw=2
-        :bordercolor=black@0.25
-        :fontfile=C\\:/Users/Nathan/AppData/Local/Microsoft/Windows/Fonts/OpenSans-Bold.ttf
-        :fontcolor=#ffffff@0.9
-        :fontsize=48
-        :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
-        :x=50
-        :y=(h-text_h)/10*9"
-        $filterArtist = "drawtext=
-        text=${artist}
-        :shadowx=4
-        :shadowy=3
-        :shadowcolor=black@0.35
-        :borderw=2
-        :bordercolor=black@0.25
-        :fontfile=C\\:/Users/Nathan/AppData/Local/Microsoft/Windows/Fonts/OpenSans-Bold.ttf
-        :fontcolor=#c0c0c0@0.9
-        :fontsize=36
-        :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
-        :x=50
-        :y=(h-text_h)/10*9 + 40"
-        return "$filterTitle,$filterArtist"
-    }
 
     # region Texte Musique
     $sousTitres = Get-Content -Path .\soustitres.json | ConvertFrom-Json
@@ -229,13 +229,15 @@ if ($ourbals -eq 1)
     # echo $subtitleFilter
     
     Write-Host "Burning in subtitles and watermark" -ForegroundColor Magenta
-    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -i .\images\wm.png -filter_complex "[1:v]scale=-1:240 [ovrl],[0:v][ovrl]overlay=20:20" -codec:a copy .\temp\output.mkv
+    # ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -i .\images\wm.png -filter_complex "[1:v]scale=-1:200,colorchannelmixer=aa=0.3[ovrl],[0:v][ovrl]overlay=$($videoW - 180):$($videoH - 220),$subtitleFilter" -codec:a copy .\temp\output.mkv
     
-    Write-Host -ForegroundColor Megenta "H.264 reencode"
-    ffmpeg -y -i .\temp\nosub.mkv -c:v h264_amf -b:v 3M -pass 1 -an -f null NUL && ffmpeg -y -i .\temp\nosub.mkv -c:v h264_amf -b:v 3M -pass 2 -c:a copy .\out\output.mp4
+    Write-Host "H.264 reencode" -ForegroundColor Magenta
+    # ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -c:v h264_amf -quality quality -rc cbr -c:a copy .\out\output.mp4
+    
+    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -c:v libvpx-vp9 -b:v 2000k -cpu-used 2 -deadline good -row-mt 1 .\out\out.webm
+    
     # endregion
 }
-
 
 # ffplay -y -loglevel error -stats -i .\temp\nosub.mkv -vf "" -codec:v libx265 -crf 18 -preset medium -codec:a copy
 # ffmpeg -y -loglevel error -stats -i .\temp\overlayed.mkv -i .\img.png -filter_complex "[1:v]scale=-1:170 [ovrl],[0:v][ovrl]overlay=10:10" -codec:v libx265 -crf 18 -preset medium -codec:a copy output.mp4
