@@ -5,6 +5,8 @@ Ajouter les arguments "image" et "dossier des vidéos", plus un reencodage vers 
 But : que je puisse le lancer en headless pendant la nuit et obtenir non seulement l'image
 mais aussi le timelapse qui aura été réencodé pendant la nuit
 
+Espacer un chouïa les textes de titre et artiste en haut et en bas
+
 #>
 
 function generateTextBlurb {    
