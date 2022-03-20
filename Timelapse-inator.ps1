@@ -69,11 +69,11 @@ ForEach ($file in Get-ChildItem $temp\* -Include @("*.mkv")) {
 
 # Concaténer les fichiers accélérés
 Write-Host "Creating the timelapse" -ForegroundColor Yellow
-ffmpeg -loglevel error -stats -f concat -safe 0 -i ${temp}\list.txt -c copy $temp\output.mkv
+ffmpeg -y -loglevel error -stats -f concat -safe 0 -i ${temp}\list.txt -c copy $temp\output.mkv
 
 #Nettoyer le fichier concaténé
 Write-Host "Cleaning up the timelapse" -ForegroundColor Yellow
-ffmpeg -i $temp\output.mkv -loglevel error -stats -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 $temp\Timelapse.mkv
+ffmpeg -y -i $temp\output.mkv -loglevel error -stats -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 $temp\Timelapse.mkv
 
 ## CLEANUP
 # Supprimer le dossier temp récursivement

@@ -1,12 +1,10 @@
 ﻿<#
 PLAN
-10) Titres et textes:
-    10.3) Template de titre : rectangle qui s'allonge sur 10 frames à gauche
-            Frame 11 : texte commence à apparaître, sur 7 frames
-            250 frames
-            16 frame de fade out texte
-            11 frames de réduction rectangle
-    10.4) Texte "Total work time": 5s total, fade in 1s, fade out 1s
+
+Ajouter les arguments "image" et "dossier des vidéos", plus un reencodage vers du VP9/AV1.
+But : que je puisse le lancer en headless pendant la nuit et obtenir non seulement l'image
+mais aussi le timelapse qui aura été réencodé pendant la nuit
+
 #>
 
 function generateTextBlurb {    
@@ -21,9 +19,9 @@ function generateTextBlurb {
     :shadowcolor=black@0.35
     :borderw=2
     :bordercolor=black@0.25
-    :fontfile=C\\:/Users/pixel/AppData/Local/Microsoft/Windows/Fonts/OpenSans-Bold.ttf
+    :fontfile=C\\:/Windows/Fonts/OpenSans-Bold.ttf
     :fontcolor=#ffffff@0.9
-    :fontsize=48
+    :fontsize=42
     :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
     :x=50
     :y=(h-text_h)/10*9"
@@ -34,7 +32,7 @@ function generateTextBlurb {
     :shadowcolor=black@0.35
     :borderw=2
     :bordercolor=black@0.25
-    :fontfile=C\\:/Users/pixel/AppData/Local/Microsoft/Windows/Fonts/OpenSans-Bold.ttf
+    :fontfile=C\\:/Windows/Fonts/OpenSans-Bold.ttf
     :fontcolor=#c0c0c0@0.9
     :fontsize=36
     :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
@@ -47,7 +45,7 @@ $ourbals = 1
 if ($ourbals -eq 1)
 {
     # VIDEO
-    $image = "Z:\Renders\Watermarked\TracerPussyDomination - WM.jpg"
+    $image = "Z:\Renders\Commissions\SeraphineStuck - WM.jpg"
 
     # region Lister toutes les vidéos
     Clear-Content .\videos.txt
@@ -103,18 +101,18 @@ if ($ourbals -eq 1)
     }
 
     #### TIMELAPSE
-    # $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
-    # & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
+    $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
+    & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
 
     $video = ".\temp\speedup\Timelapse.mkv"
     $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
     Write-Host "Longueur vidéo post traitement = $duration secondes ou $([math]::Floor($duration/60))m$($duration%60)s" -ForegroundColor Magenta
 
-    # $speedUpFactor = $audioLength / ([Int32]$duration + 20)
+    $speedUpFactor = $audioLength / ([Int32]$duration + 20)
     # Write-Host -ForegroundColor Blue "$speedUpFactor, $duration"
     $target = $speedUpFactor * $duration
     $target = [math]::Round($target)
-    Write-Host -ForegroundColor Magenta "Target length: $target"
+    Write-Host -ForegroundColor Magenta "Target length: $target secondes ou $([math]::Floor($target/60))m$($target%60)s"
    
     #### Compute the fade out 
     $frames = ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 $video
@@ -122,10 +120,9 @@ if ($ourbals -eq 1)
     $fadeOutStart = ($frames - 1.5 * ($framerate / $speedUpFactor))
 
     Write-Host "Speeding up and adding fades" -ForegroundColor Magenta
-    # ffmpeg -y -loglevel error -stats -i $video -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
+    ffmpeg -y -loglevel error -stats -i $video -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
     
     # endregion
-
 
     # region Écran de fin de vidéo
 
@@ -168,7 +165,7 @@ if ($ourbals -eq 1)
     $pps = $hiddenHeight / 10
 
     Write-Host "`tBottom" -ForegroundColor Magenta
-    # ffmpeg -y -loglevel error -stats -loop 1 -r 60 -i .\temp\bottom.jpg -i .\temp\speed.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 - ${hiddenHeight}) + t*$pps" -r 60 -t 20 .\temp\bottom.mkv
+    ffmpeg -y -loglevel error -stats -loop 1 -r 60 -i .\temp\bottom.jpg -i .\temp\speed.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 - ${hiddenHeight}) + t*$pps" -r 60 -t 20 .\temp\bottom.mkv
 
 
     #### Top
@@ -179,9 +176,9 @@ if ($ourbals -eq 1)
     $pps = $hiddenHeight/10
 
     Write-Host "`tTop" -ForegroundColor Magenta
-    # ffmpeg -y -loglevel error -stats -loop 1 -r 60 -i .\temp\top.jpg -i .\temp\bottom.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 + $hiddenHeight) - t*$pps,
-    # fade=t=in:st=0:d=1.5,
-    # fade=t=out:st=17:d=3" -r 60 -t 20 .\temp\overlayed.mkv
+    ffmpeg -y -loglevel error -stats -loop 1 -r 60 -i .\temp\top.jpg -i .\temp\bottom.mkv -filter_complex "[1][0]overlay=(main_w - overlay_w)/2:((main_h - overlay_h)/2 + $hiddenHeight) - t*$pps,
+    fade=t=in:st=0:d=1.5,
+    fade=t=out:st=17:d=3" -r 60 -t 20 .\temp\overlayed.mkv
 
     ##TODO "Total work time"
 
@@ -190,22 +187,22 @@ if ($ourbals -eq 1)
     
     # region Ajouter l'écran de fin à la vidéo
     Write-Host "Concatenating" -ForegroundColor Magenta
-    # ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\concat.ffmpeg -c copy .\temp\output.mkv 
+    ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\concat.ffmpeg -c copy .\temp\output.mkv 
     # endregion
 
 
     # region Ajouter la musique
     Write-Host "Adding music" -ForegroundColor Magenta
-    # ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\audios.txt -c copy .\temp\output.wav
+    ffmpeg -y -loglevel error -stats -f concat -safe 0 -i .\audios.txt -c copy .\temp\output.wav
 
     $audioFadeStart = $audioLength - 5
 
-    # ffmpeg -y -loglevel error -stats -i .\temp\output.wav -af "afade=t=out:st=${audioFadeStart}:d=5" .\temp\outputFade.wav
+    ffmpeg -y -loglevel error -stats -i .\temp\output.wav -af "afade=t=out:st=${audioFadeStart}:d=5" .\temp\outputFade.wav
 
-    # ffmpeg -y -loglevel error -stats -i .\temp\output.mkv -i .\temp\outputFade.wav -map 0:v -map 1:a -c:v copy .\temp\nosub.mkv
+    ffmpeg -y -loglevel error -stats -i .\temp\output.mkv -i .\temp\outputFade.wav -map 0:v -map 1:a -c:v copy .\temp\nosub.mkv
 
     # endregion
-
+    
 
     # region Texte Musique
     $sousTitres = Get-Content -Path .\soustitres.json | ConvertFrom-Json
@@ -227,15 +224,15 @@ if ($ourbals -eq 1)
 
     $subtitleFilter = $subtitleFilter.TrimEnd(", ")
     # echo $subtitleFilter
-    
+
     Write-Host "Burning in subtitles and watermark" -ForegroundColor Magenta
-    # ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -i .\images\wm.png -filter_complex "[1:v]scale=-1:200,colorchannelmixer=aa=0.3[ovrl],[0:v][ovrl]overlay=$($videoW - 180):$($videoH - 220),$subtitleFilter" -codec:a copy .\temp\output.mkv
-    
+    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -i .\images\wm.png -filter_complex "[1:v]scale=-1:200,colorchannelmixer=aa=0.3[ovrl],[0:v][ovrl]overlay=$($videoW - 180):$($videoH - 220),$subtitleFilter" -codec:a copy .\out\output.mkv
+
     Write-Host "H.264 reencode" -ForegroundColor Magenta
     # ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -c:v h264_amf -quality quality -rc cbr -c:a copy .\out\output.mp4
-    
-    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -c:v libvpx-vp9 -b:v 2000k -cpu-used 2 -deadline good -row-mt 1 .\out\out.webm
-    
+
+    # ffmpeg -y -loglevel error -hide_banner -stats -i .\out\output.mkv -c:v libvpx-vp9 -b:v 2000k -cpu-used 2 -deadline good -row-mt 1 .\out\out.webm
+
     # endregion
 }
 
