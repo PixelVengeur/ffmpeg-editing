@@ -1,5 +1,4 @@
-﻿
-param([string]$sourceDir = "",
+﻿param([string]$sourceDir = "",
 [string]$temp = "",
 [Int32]$pts = -1,
 [Int32]$fps = -1,
@@ -16,12 +15,12 @@ if ($temp -eq "")
     $temp = Read-Host "Path to the temporary folder"
 }
 
-if ($pts -eq -1)
+if ($pts -lt 1)
 {
     $pts = Read-Host "Speed multiplier"
 }
 
-if ($fps -eq -1)
+if ($fps -eq 1)
 {
     $fps = Read-Host "Target FPS"
 }
@@ -61,7 +60,7 @@ else {
 
 # Ajouter les fichiers accélérés à list.txt
 Write-Host "Listing files" -ForegroundColor Yellow
-ForEach ($file in Get-ChildItem $temp\* -Include @("*.mkv")) {
+ForEach ($file in Get-ChildItem $temp\* -Include @("Fast*.mkv")) {
     $filePath ="file '$file'"
     # $filePath = $filePath -replace '[\\/]', '/'
     Add-Content -Path $temp\list.txt -Value $filePath

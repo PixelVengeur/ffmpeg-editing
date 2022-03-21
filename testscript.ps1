@@ -1,0 +1,1 @@
+Write-Host "Yup, that works" -ForegroundColor Magenta

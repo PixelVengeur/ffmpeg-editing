@@ -5,60 +5,40 @@ Ajouter les arguments "image" et "dossier des vidéos", plus un reencodage vers 
 But : que je puisse le lancer en headless pendant la nuit et obtenir non seulement l'image
 mais aussi le timelapse qui aura été réencodé pendant la nuit
 
-Espacer un chouïa les textes de titre et artiste en haut et en bas
-
 #>
 
-function generateTextBlurb {    
-    param ($startTS, $title, $artist)
+param([string]$image = "",
+[string]$videoFolder = "")
 
-    $tempVal = ""
+$videoFolder = ".\videos"
+$image = "C:\Users\Nathan\OneDrive\Images\test.png"
 
-    $filterTitle = "drawtext=
-    text=${title}
-    :shadowx=4
-    :shadowy=3
-    :shadowcolor=black@0.35
-    :borderw=2
-    :bordercolor=black@0.25
-    :fontfile=C\\:/Windows/Fonts/OpenSans-Bold.ttf
-    :fontcolor=#ffffff@0.9
-    :fontsize=42
-    :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
-    :x=50
-    :y=(h-text_h)/10*9"
-    $filterArtist = "drawtext=
-    text=${artist}
-    :shadowx=4
-    :shadowy=3
-    :shadowcolor=black@0.35
-    :borderw=2
-    :bordercolor=black@0.25
-    :fontfile=C\\:/Windows/Fonts/OpenSans-Bold.ttf
-    :fontcolor=#c0c0c0@0.9
-    :fontsize=36
-    :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
-    :x=50
-    :y=(h-text_h)/10*9 + 40"
-    return "$filterTitle,$filterArtist"
+#region __main__
+if ($videoFolder -eq "")
+{
+    $videoFolder = Read-Host "Path to the folder containing the footage to speed up"
 }
-$ourbals = 1
+
+if ($image -eq "")
+{
+    $image = Read-Host "Path to the image to be overlayed"
+}
+#endregion
+
+$ourbals = 0
 
 if ($ourbals -eq 1)
 {
     # VIDEO
-    $image = "Z:\Renders\Commissions\SeraphineStuck - WM.jpg"
 
     # region Lister toutes les vidéos
     Clear-Content .\videos.txt
-    foreach ($file in Get-ChildItem .\videos\* -Include @("*.mkv")) {
+    foreach ($file in Get-ChildItem $($videoFolder + "\*") -Include @("*.mkv")) {
         $filePath ="file '$file'"
         # Write-Host "file '${filePath}'"
         Add-Content -Path .\videos.txt -Value $filePath
     }
     # endregion
-
-
     # region Lister tous les audios
     Clear-Content .\audios.txt
     foreach ($file in Get-ChildItem .\musiques\* -Include @("*.wav")) {
@@ -103,10 +83,11 @@ if ($ourbals -eq 1)
     }
 
     #### TIMELAPSE
-    $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
-    & $speedUpScript -sourceDir ".\videos" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
-
-    $video = ".\temp\speedup\Timelapse.mkv"
+    # $speedUpScript = "$PSScriptRoot\Timelapse-inator.ps1"
+    # & $speedUpScript -sourceDir "$videoFolder" -temp ".\temp\speedup" -pts 20 -fps 60 -del "N"
+    Move-Item  .\temp\speedup\Timelapse.mkv .\temp
+    
+    $video = ".\temp\Timelapse.mkv"
     $duration = ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $video
     Write-Host "Longueur vidéo post traitement = $duration secondes ou $([math]::Floor($duration/60))m$($duration%60)s" -ForegroundColor Magenta
 
@@ -125,6 +106,7 @@ if ($ourbals -eq 1)
     ffmpeg -y -loglevel error -stats -i $video -vf "setpts=PTS*$speedUpFactor,fade=in:st=0:d=3,fade=out:s=${fadeOutStart}:d=1.5" -r 60 -an -sn -max_interleave_delta 0 .\temp\speed.mkv
     
     # endregion
+
 
     # region Écran de fin de vidéo
 
@@ -236,6 +218,46 @@ if ($ourbals -eq 1)
     # ffmpeg -y -loglevel error -hide_banner -stats -i .\out\output.mkv -c:v libvpx-vp9 -b:v 2000k -cpu-used 2 -deadline good -row-mt 1 .\out\out.webm
 
     # endregion
+}
+
+ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -c:v libvpx-vp9 -pass 1 -b:v 4000K -g 48 -keyint_min 48 -sc_threshold 0 -threads 8 -speed 4 -row-mt 1 -tile-columns 4 -f webm NUL $null
+
+ffmpeg -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -c:v libvpx-vp9 -pass 2 -b:v 4M -minrate 3M -maxrate 5M -bufsize 1M -g 48 -keyint_min 48 -sc_threshold 0 -row-mt 1 -threads 8 -speed 4 -tile-columns 4 .\out\output.webm
+
+function generateTextBlurb {    
+    param ($startTS, $title, $artist)
+
+    $tempVal = ""
+
+    $filterTitle = "drawtext=
+    text=${title}
+    :shadowx=4
+    :shadowy=3
+    :shadowcolor=black@0.35
+    :borderw=2
+    :bordercolor=black@0.25
+    :fontfile=G\\:/Windows/Fonts/OpenSans-Bold.ttf
+    :fontcolor=#ffffff@0.9
+    :fontsize=42
+    :line_spacing=6
+    :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
+    :x=50
+    :y=(h-text_h)/10*9"
+    $filterArtist = "drawtext=
+    text=${artist}
+    :shadowx=4
+    :shadowy=3
+    :shadowcolor=black@0.35
+    :borderw=2
+    :bordercolor=black@0.25
+    :fontfile=G\\:/Windows/Fonts/OpenSans-Bold.ttf
+    :fontcolor=#c0c0c0@0.9
+    :fontsize=36
+    :line_spacing=15
+    :alpha='if(lt(t,$startTS),0,if(lt(t,$startTS + 0.5),(t-$startTS)/0.625,if(lt(t,$startTS + 5.5),0.8,if(lt(t,$startTS + 6),(0.5-(t-($startTS + 5.5)))/0.625,0))))'
+    :x=52
+    :y=(h-text_h)/10*9 + 50"
+    return "$filterTitle,$filterArtist"
 }
 
 # ffplay -y -loglevel error -stats -i .\temp\nosub.mkv -vf "" -codec:v libx265 -crf 18 -preset medium -codec:a copy

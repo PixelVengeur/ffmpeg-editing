@@ -1,1 +1,2 @@
-file 'C:\Users\pixel\Documents\GitHub\ffmpeg-editing\musiques\Jerusalem Quartet Johannes Brahms IV Finale.wav'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\Oprah Winfrey vs Ellen DeGeneres. Epic Rap Battles of History [NIsa-vfXV6Q].wav'
+file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\musiques\Ragnar Lodbrok vs Richard The Lionheart. Epic Rap Battles of History. [kgJMaP4msTs].wav'
