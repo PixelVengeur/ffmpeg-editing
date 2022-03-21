@@ -222,7 +222,7 @@ if ($ourbals -eq 1)
 
 ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -c:v libvpx-vp9 -pass 1 -b:v 4000K -g 48 -keyint_min 48 -sc_threshold 0 -threads 8 -speed 4 -row-mt 1 -tile-columns 4 -f webm NUL $null
 
-ffmpeg -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -c:v libvpx-vp9 -pass 2 -b:v 4M -minrate 3M -maxrate 5M -bufsize 1M -g 48 -keyint_min 48 -sc_threshold 0 -row-mt 1 -threads 8 -speed 4 -tile-columns 4 .\out\output.webm
+ffmpeg -loglevel error -hide_banner -stats -i .\temp\nosub.mkv -c:v libvpx-vp9 -pass 2 -b:v 4M -g 48 -keyint_min 48 -sc_threshold 0 -row-mt 1 -threads 8 -speed 2 -tile-columns 4 .\out\output.webm
 
 function generateTextBlurb {    
     param ($startTS, $title, $artist)
