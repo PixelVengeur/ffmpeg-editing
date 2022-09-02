@@ -1,4 +1,0 @@
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\2021-12-05_01-14-36.mkv'
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\2021-12-06_20-46-47.mkv'
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\2021-12-06_23-13-05.mkv'
-file 'C:\Users\Nathan\Documents\GitHub\ffmpeg-editing\videos\2021-12-07_22-04-22.mkv'

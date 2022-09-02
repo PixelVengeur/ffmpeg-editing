@@ -20,7 +20,7 @@ if ($pts -lt 1)
     $pts = Read-Host "Speed multiplier"
 }
 
-if ($fps -eq 1)
+if ($fps -eq -1)
 {
     $fps = Read-Host "Target FPS"
 }
@@ -70,9 +70,11 @@ ForEach ($file in Get-ChildItem $temp\* -Include @("Fast*.mkv")) {
 Write-Host "Creating the timelapse" -ForegroundColor Yellow
 ffmpeg -y -loglevel error -stats -f concat -safe 0 -i ${temp}\list.txt -c copy $temp\output.mkv
 
-#Nettoyer le fichier concaténé
+# Nettoyer le fichier concaténé
 Write-Host "Cleaning up the timelapse" -ForegroundColor Yellow
-ffmpeg -y -i $temp\output.mkv -loglevel error -stats -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 $temp\Timelapse.mkv
+Set-Location $temp
+ffmpeg -y -i .\output.mkv -loglevel error -stats -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 ..\Timelapse.mkv
+Set-Location ..\..
 
 ## CLEANUP
 # Supprimer le dossier temp récursivement
@@ -81,13 +83,13 @@ if ($del -eq "")
     $del = Read-Host "Do you want to delete the temporary directory and all its content? (Y/N)"
 }
 
-if ($del -eq "y" -or $del -eq "Y") {
-    try {
-        Remove-Item $temp -Recurse
-    }
-    catch {
-        "An error occured removing a temporary file"
-    }
-}
+# if ($del -eq "y" -or $del -eq "Y") {
+#     try {
+#         Remove-Item $temp -Recurse
+#     }
+#     catch {
+#         "An error occured removing a temporary file"
+#     }
+# }
 
 return "$sourceDir\Timelapse.mkv"
