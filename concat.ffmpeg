@@ -1,2 +1,2 @@
-file temp\\speed.mkv
-file temp\\overlayed.mkv
+file 'temp/speed.mkv'
+file 'temp/overlay/overlayed.mkv'

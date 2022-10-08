@@ -45,7 +45,9 @@ if (-not(Test-Path -Path $temp -PathType Container)) {
 # Accélérer chaque vidéo une à une
 ForEach ($file in Get-ChildItem -Path $sourceDir -Name -Include @("*.mkv")) {
     Write-Host "Speeding up $file" -ForegroundColor Yellow
-    ffmpeg -y -i "$sourceDir\$file" -hide_banner -loglevel error -stats -max_interleave_delta 0 -filter:v "setpts=PTS/$pts" -an -r $fps $temp\Fast$file
+    
+    ffmpeg -y -loglevel error -hide_banner -stats -r $fps -i "$sourceDir\$file" -max_interleave_delta 0 -vf mpdecimate -fps_mode vfr -an -max_muxing_queue_size 9999 $temp\Fast$file
+
 }
 
 Write-Host "All footage has been sped up`nConcatenating sped-up footage" -ForegroundColor Yellow
@@ -68,13 +70,8 @@ ForEach ($file in Get-ChildItem $temp\* -Include @("Fast*.mkv")) {
 
 # Concaténer les fichiers accélérés
 Write-Host "Creating the timelapse" -ForegroundColor Yellow
-ffmpeg -y -loglevel error -stats -f concat -safe 0 -i ${temp}\list.txt -c copy $temp\output.mkv
+ffmpeg -y -loglevel error -stats -f concat -safe 0 -i ${temp}\list.txt -c copy .\temp\Concatenated.mkv
 
-# Nettoyer le fichier concaténé
-Write-Host "Cleaning up the timelapse" -ForegroundColor Yellow
-Set-Location $temp
-ffmpeg -y -i .\output.mkv -loglevel error -stats -vf mpdecimate,setpts=N/$fps/TB -map 0:v -vsync vfr -max_muxing_queue_size 9999 ..\Timelapse.mkv
-Set-Location ..\..
 
 ## CLEANUP
 # Supprimer le dossier temp récursivement
