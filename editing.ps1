@@ -347,9 +347,9 @@ function EditVideo {
 
     $audioFadeStart = $audioLength - 5
 
-    ffmpeg -y -loglevel error -stats -i .\temp\audio\output.wav -af "volume=-6.72dB,afade=t=out:st=${audioFadeStart}:d=5" .\temp\audio\outputFade.wav
+    ffmpeg -y -loglevel error -hide_banner -stats -i .\temp\audio\output.wav -af "volume=-6.72dB,afade=t=out:st=${audioFadeStart}:d=5" .\temp\audio\outputFade.wav
 
-    ffmpeg -y -loglevel info -stats -i .\temp\noaudio.mkv -i .\temp\audio\outputFade.wav -map 0:v -map 1:a -c:v copy ".\out\$outName.mkv"
+    ffmpeg -y -loglevel info -hide_banner -stats -i .\temp\noaudio.mkv -i .\temp\audio\outputFade.wav -map 0:v -map 1:a -c:v copy ".\out\$outName.mkv"
 
     # endregion
 
@@ -366,7 +366,7 @@ function EditVideo {
     }
 
     Write-Host "AV1 reencode" -ForegroundColor Magenta
-    ffmpeg -y -loglevel info -hide_banner -stats -i ".\out\$outName.mkv" -c:v libsvtav1 -preset 6 -crf 30 -b:v 0 -g 300 -pix_fmt yuv420p10le -svtav1-params tune=0 "C:\Users\pixel\Desktop\To_upload\$filename.webm"
+    ffmpeg -y -loglevel info -hide_banner -stats -i ".\out\$outName.mkv" -c:v libsvtav1 -preset 6 -crf 30 -b:v 0 -svtav1-params tune=0 "C:\Users\pixel\Desktop\To_upload\$filename.webm"
 
     # Write-Host "VP9 reencode" -ForegroundColor Magenta
     # Write-Host "`tFirst pass" -ForegroundColor Magenta
